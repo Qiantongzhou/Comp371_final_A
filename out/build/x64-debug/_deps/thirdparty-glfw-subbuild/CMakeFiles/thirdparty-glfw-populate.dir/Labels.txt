@@ -1,0 +1,13 @@
+# Target labels
+ thirdparty-glfw-populate
+# Source files and their labels
+C:/Users/26565/source/repos/Comp371_final_A/out/build/x64-debug/_deps/thirdparty-glfw-subbuild/CMakeFiles/thirdparty-glfw-populate
+C:/Users/26565/source/repos/Comp371_final_A/out/build/x64-debug/_deps/thirdparty-glfw-subbuild/CMakeFiles/thirdparty-glfw-populate.rule
+C:/Users/26565/source/repos/Comp371_final_A/out/build/x64-debug/_deps/thirdparty-glfw-subbuild/CMakeFiles/thirdparty-glfw-populate-complete.rule
+C:/Users/26565/source/repos/Comp371_final_A/out/build/x64-debug/_deps/thirdparty-glfw-subbuild/thirdparty-glfw-populate-prefix/src/thirdparty-glfw-populate-stamp/thirdparty-glfw-populate-build.rule
+C:/Users/26565/source/repos/Comp371_final_A/out/build/x64-debug/_deps/thirdparty-glfw-subbuild/thirdparty-glfw-populate-prefix/src/thirdparty-glfw-populate-stamp/thirdparty-glfw-populate-configure.rule
+C:/Users/26565/source/repos/Comp371_final_A/out/build/x64-debug/_deps/thirdparty-glfw-subbuild/thirdparty-glfw-populate-prefix/src/thirdparty-glfw-populate-stamp/thirdparty-glfw-populate-download.rule
+C:/Users/26565/source/repos/Comp371_final_A/out/build/x64-debug/_deps/thirdparty-glfw-subbuild/thirdparty-glfw-populate-prefix/src/thirdparty-glfw-populate-stamp/thirdparty-glfw-populate-install.rule
+C:/Users/26565/source/repos/Comp371_final_A/out/build/x64-debug/_deps/thirdparty-glfw-subbuild/thirdparty-glfw-populate-prefix/src/thirdparty-glfw-populate-stamp/thirdparty-glfw-populate-mkdir.rule
+C:/Users/26565/source/repos/Comp371_final_A/out/build/x64-debug/_deps/thirdparty-glfw-subbuild/thirdparty-glfw-populate-prefix/src/thirdparty-glfw-populate-stamp/thirdparty-glfw-populate-patch.rule
+C:/Users/26565/source/repos/Comp371_final_A/out/build/x64-debug/_deps/thirdparty-glfw-subbuild/thirdparty-glfw-populate-prefix/src/thirdparty-glfw-populate-stamp/thirdparty-glfw-populate-test.rule
