@@ -104,7 +104,7 @@ int main(int argc, char* argv[])
 
     //==============================================================camera==============================================//
     // Camera parameters for view transform
-    vec3 cameraPosition(6.0f, 18.0f, 40.0f);
+    vec3 cameraPosition(6.0f, 18.0f, 42.0f);
     vec3 cameraLookAt(0.0f, 0.0f, -1.0f);
     vec3 cameraUp(0.0f, 1.0f, 0.0f);
 
