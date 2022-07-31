@@ -48,10 +48,16 @@ int main(int argc, char* argv[])
     //Setup models
     //string heraclesPath = "assets/models/sphereb.obj";
     string conePath = localdirectory + "assets/models/cone.obj";
-
+    string spherePath = localdirectory + "assets/models/sphere.obj";
+    int sphereVertices;
+    GLuint sphereEBO = setupModelEBO(spherePath, sphereVertices);
 
     int coneVertices;
     GLuint coneEBO = setupModelEBO(conePath, coneVertices);
+
+
+
+
 
     GLuint red = loadTexture(localdirectory + "assets/texture/red.png");
     GLuint texturedCubeVAO = createTexturedCubeVertexArrayObject();
@@ -100,7 +106,9 @@ int main(int argc, char* argv[])
     cone->Setmode(worldMatrixLocation, mat4(1.0f), 1.0, 1.0, 1.0, 1.0);
     entitys.push_back(cone);
 
-
+    mode1* sphere = new mode1(EBO, sphereEBO, red, sphereVertices, 1.0, 1.0, 1.0);
+    sphere->Setmode(worldMatrixLocation, mat4(1.0f), 1.0, 1.0, 1.0, 1.0);
+    entitys.push_back(sphere);
 
     //==============================================================camera==============================================//
     // Camera parameters for view transform
@@ -305,6 +313,11 @@ int main(int argc, char* argv[])
             glClear(GL_DEPTH_BUFFER_BIT);
             // Bind geometry
             glBindTexture(GL_TEXTURE_2D, depth_map_texture); 
+            GLuint worldMatrixLocation = glGetUniformLocation(shaderShadow, "model_matrix");
+            for (mode1* i : entitys) {
+                i->changeProgram(worldMatrixLocation);
+                i->printmodeshadow();
+            }
         }
 
         glfwSwapBuffers(window);

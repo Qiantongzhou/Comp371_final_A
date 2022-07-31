@@ -42,8 +42,8 @@ public:
     GLuint texture = 0;
     int vertices;
     mat4 mode;
-    GLuint worldMatrixLocation;
-    Printtype type;
+    GLuint worldMatrixLocation=0;
+    Printtype type=EBO;
 
     vec3 centre = vec3((0.0f + mode_X) * mode_scale, 0.0f * mode_scale, (0.0f + mode_Y) * mode_scale);
     vec3 axis_rotate = vec3(0.0f, 1.0f, 0.0f);
@@ -72,6 +72,7 @@ public:
         
         return mode;
     }
+
     void printmode() {
         if (type == Printtype::EBO) {
              printEBOmode();
@@ -95,6 +96,30 @@ public:
         glUniformMatrix4fv(worldMatrixLocation, 1, GL_FALSE, &mode[0][0]);
         glActiveTexture(GL_TEXTURE0 + 1);
         glBindTexture(GL_TEXTURE_2D, texture);
+        glDrawArrays(GL_TRIANGLES, 0, vertices);
+    }
+    void changeProgram(GLuint worldMatrixLocation) {
+        this->worldMatrixLocation = worldMatrixLocation;
+    }
+    void printmodeshadow() {
+        if (type == Printtype::EBO) {
+            printEBOmodeshadow();
+        }
+        if (type == Printtype::VAO) {
+            printVAOmodeshadow();
+        }
+    }
+
+    void printEBOmodeshadow() {
+        glBindVertexArray(modeid);
+        glUniformMatrix4fv(worldMatrixLocation, 1, GL_FALSE, &mode[0][0]);
+        glActiveTexture(GL_TEXTURE0);
+        glDrawElements(GL_TRIANGLES, vertices, GL_UNSIGNED_INT, 0);
+    }
+    void printVAOmodeshadow() {
+        glBindVertexArray(modeid);
+        glUniformMatrix4fv(worldMatrixLocation, 1, GL_FALSE, &mode[0][0]);
+        glActiveTexture(GL_TEXTURE0);
         glDrawArrays(GL_TRIANGLES, 0, vertices);
     }
 };
