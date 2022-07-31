@@ -48,12 +48,15 @@ int main(int argc, char* argv[])
     //Setup models
     //string heraclesPath = "assets/models/sphereb.obj";
     string conePath = localdirectory + "assets/models/cone.obj";
-
+    string treePath = localdirectory + "assets/models/Tree.obj";
 
     int coneVertices;
+    int treeVertices;
     GLuint coneEBO = setupModelEBO(conePath, coneVertices);
+    GLuint treeEBO = setupModelEBO(treePath, treeVertices);
 
     GLuint red = loadTexture(localdirectory + "assets/texture/red.png");
+    GLuint wood = loadTexture(localdirectory + "assets/texture/wood.png");
     GLuint texturedCubeVAO = createTexturedCubeVertexArrayObject();
 
 
@@ -97,8 +100,13 @@ int main(int argc, char* argv[])
     
     mode1* cone = new mode1(EBO, coneEBO, red, coneVertices, 1.0, 1.0, 1.0);
 
+    mode1* tree = new mode1(EBO, treeEBO, wood, treeVertices, 1.0, 1.0, 1.0);
+
     cone->Setmode(worldMatrixLocation, mat4(1.0f), 1.0, 1.0, 1.0, 1.0);
     entitys.push_back(cone);
+
+    tree->Setmode(worldMatrixLocation, mat4(1.0f), 1.0, 1.0, 1.0, 1.0);
+    entitys.push_back(tree);
 
 
 
