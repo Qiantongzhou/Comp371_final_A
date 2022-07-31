@@ -1,10 +1,12 @@
 #pragma once
 #include <glm/glm.hpp>
+#include<iostream>
 #include <cstring>
 #include <vector>
 #include <string>
 #include <stdio.h>
 #include <stdlib.h>
+using namespace std;
 
 bool loadobj(
 	const char* path,
@@ -21,7 +23,7 @@ bool loadobj(
 	file = fopen(path, "r");
 	if (!file) {
 		printf("Impossible to open the file ! Are you in the right path ?\n");
-
+		cout << "\n\n\n              OBJ file can not find in directory: "<<path << "\n\n\n"<<endl;
 		return false;
 	}
 

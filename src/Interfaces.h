@@ -69,8 +69,12 @@ GLuint setupModelEBO(string path, int& vertexCount)
     //We won't be needing the normals or UVs for this program
    
         const char* pathf = path.c_str();
-        loadobj(pathf, vertexIndices, vertices, normals, UVs);
+        bool load=loadobj(pathf, vertexIndices, vertices, normals, UVs);
     
+        if (!load) {
+            glfwTerminate();
+            exit(0);
+        }
     GLuint VAO;
     glGenVertexArrays(1, &VAO);
     glBindVertexArray(VAO); //Becomes active VAO
