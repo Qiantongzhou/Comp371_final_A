@@ -1,3 +1,0 @@
-C:/Users/26565/source/repos/Comp371_final_A/out/build/x64-debug/_deps/thirdparty-glm-subbuild/CMakeFiles/thirdparty-glm-populate.dir
-C:/Users/26565/source/repos/Comp371_final_A/out/build/x64-debug/_deps/thirdparty-glm-subbuild/CMakeFiles/edit_cache.dir
-C:/Users/26565/source/repos/Comp371_final_A/out/build/x64-debug/_deps/thirdparty-glm-subbuild/CMakeFiles/rebuild_cache.dir

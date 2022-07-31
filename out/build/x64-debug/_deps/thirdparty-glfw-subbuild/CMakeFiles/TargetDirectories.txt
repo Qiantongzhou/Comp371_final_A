@@ -1,3 +1,0 @@
-C:/Users/26565/source/repos/Comp371_final_A/out/build/x64-debug/_deps/thirdparty-glfw-subbuild/CMakeFiles/thirdparty-glfw-populate.dir
-C:/Users/26565/source/repos/Comp371_final_A/out/build/x64-debug/_deps/thirdparty-glfw-subbuild/CMakeFiles/edit_cache.dir
-C:/Users/26565/source/repos/Comp371_final_A/out/build/x64-debug/_deps/thirdparty-glfw-subbuild/CMakeFiles/rebuild_cache.dir

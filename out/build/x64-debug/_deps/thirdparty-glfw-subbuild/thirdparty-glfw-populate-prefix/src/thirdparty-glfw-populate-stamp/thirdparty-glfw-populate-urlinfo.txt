@@ -1,3 +1,0 @@
-repository='external project URL'
-module='C:/Users/26565/source/repos/Comp371_final_A/thirdparty/glfw-3.3.2.zip'
-tag=''
