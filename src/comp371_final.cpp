@@ -33,7 +33,7 @@ int main(int argc, char* argv[])
 
     //out / build / x64 - debug / quiz2.exe
     // Black background
-    glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
+    glClearColor(0.8f, 0.8f, 0.8f, 1.0f);
     //change before run===============================================================
     string localdirectory = path;
     //=================================================================================
@@ -47,16 +47,20 @@ int main(int argc, char* argv[])
 
     //Setup models
     //string heraclesPath = "assets/models/sphereb.obj";
-    string conePath = localdirectory + "assets/models/cone.obj";
-    string treePath = localdirectory + "assets/models/Tree.obj";
+    string yeziPath = localdirectory + "assets/models/cube.obj";
+    string treePath = localdirectory + "assets/models/allGrass_001.obj";
 
-    int coneVertices;
+    int yeziVertices;
     int treeVertices;
-    GLuint coneEBO = setupModelEBO(conePath, coneVertices);
+    GLuint yeziEBO = setupModelEBO(yeziPath, yeziVertices);
     GLuint treeEBO = setupModelEBO(treePath, treeVertices);
 
-    GLuint red = loadTexture(localdirectory + "assets/texture/red.png");
-    GLuint wood = loadTexture(localdirectory + "assets/texture/wood.png");
+    GLuint wood = loadTexture(localdirectory + "assets/texture/wood1.png");
+    GLuint leaves = loadTexture(localdirectory + "assets/texture/leaf4.png");
+    GLuint grass = loadTexture(localdirectory + "assets/texture/grass.png");
+    GLuint groundTexture = loadTexture(localdirectory + "assets/texture/ground.png");
+
+
     GLuint texturedCubeVAO = createTexturedCubeVertexArrayObject();
 
 
@@ -77,11 +81,11 @@ int main(int argc, char* argv[])
         NULL);
     // Set texture sampler parameters.
     // The two calls below tell the texture sampler inside the shader how to upsample and downsample the texture. Here we choose the nearest filtering option, which means we just use the value of the closest pixel to the chosen image coordinate.
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINE);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINE);
     // The two calls below tell the texture sampler inside the shader how it should deal with texture coordinates outside of the [0, 1] range. Here we decide to just tile the image.
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP);
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
 
     GLuint depth_map_fbo;  // fbo: framebuffer object
    // Get the framebuffer
@@ -98,15 +102,16 @@ int main(int argc, char* argv[])
     GLuint worldMatrixLocation = glGetUniformLocation(texturedShaderProgram, "worldMatrix");
     vector<mode1*> entitys;
     
-    mode1* cone = new mode1(EBO, coneEBO, red, coneVertices, 1.0, 1.0, 1.0);
+    mode1* yezi = new mode1(EBO, yeziEBO, leaves, yeziVertices, 1.0, 1.0, 1.0);
 
-    mode1* tree = new mode1(EBO, treeEBO, wood, treeVertices, 1.0, 1.0, 1.0);
+    mode1* tree = new mode1(EBO, treeEBO, grass, treeVertices, 1.0, 1.0, 1.0);
 
-    cone->Setmode(worldMatrixLocation, mat4(1.0f), 1.0, 1.0, 1.0, 1.0);
-    entitys.push_back(cone);
+    yezi->Setmode(worldMatrixLocation, mat4(1.0f), 0.0, 1.0, 0.0, 1.0);
+    entitys.push_back(yezi);
 
-    tree->Setmode(worldMatrixLocation, mat4(1.0f), 1.0, 1.0, 1.0, 1.0);
+    tree->Setmode(worldMatrixLocation, mat4(1.0f), 0.5, 0.0, 0.0, 1.0);
     entitys.push_back(tree);
+
 
 
 
@@ -296,12 +301,135 @@ int main(int argc, char* argv[])
             // Bind screen as output framebuffer
             glBindFramebuffer(GL_FRAMEBUFFER, 0);
             // Clear color and depth data on framebuffer
-            glClearColor(0.1f, 0.1f, 0.1f, 1.0f);
+            glClearColor(0.8f, 0.8f, 0.8f, 1.0f);
             glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
             //vector print
             for (mode1* i : entitys) {
                 i->printmode();
             }
+
+            glActiveTexture(GL_TEXTURE0 + 1);
+            glBindVertexArray(texturedCubeVAO);
+            //ground
+            glBindTexture(GL_TEXTURE_2D, groundTexture);
+            mat4 groundMatrix;
+            float groundX = -50.0f;
+            float groundZ = -50.0f;
+            for (int i = 0; i <= 10; i++) {
+                for (int j = 0; j <= 10; j++) {
+                    groundMatrix = translate(mat4(1.0f), vec3(groundX, -1.0f, groundZ)) *
+                        scale(mat4(1.0f), vec3(5.0f, 0.05f, 5.0f));
+                    glUniformMatrix4fv(worldMatrixLocation, 1, GL_FALSE, &groundMatrix[0][0]);
+                    glDrawArrays(GL_TRIANGLES, 0, 36);
+                    groundZ += 10.0f;
+
+                }
+                groundX += 10.0f;
+                groundZ = -50.0f;
+            }
+
+
+            //leaf
+            glBindTexture(GL_TEXTURE_2D, leaves);
+            mat4 leafMatrix = translate(mat4(1.0f), vec3(0.0f, 9.0f, 0.0f)) *
+                scale(mat4(1.0f), vec3(2.0f, 2.0f, 2.0f));
+            glUniformMatrix4fv(worldMatrixLocation, 1, GL_FALSE, &leafMatrix[0][0]);
+            glDrawArrays(GL_TRIANGLES, 0, 36);
+
+            glBindTexture(GL_TEXTURE_2D, leaves);
+            mat4 leafMatrix1 = translate(mat4(leafMatrix), vec3(2.0f, 0.0f, 0.0f)) *
+                scale(mat4(1.0f), vec3(1.0f, 1.0f, 1.0f));
+            glUniformMatrix4fv(worldMatrixLocation, 1, GL_FALSE, &leafMatrix1[0][0]);
+            glDrawArrays(GL_TRIANGLES, 0, 36);
+
+            glBindTexture(GL_TEXTURE_2D, leaves);
+            mat4 leafMatrix2 = translate(mat4(leafMatrix), vec3(-2.0f, 0.0f, 0.0f)) *
+                scale(mat4(1.0f), vec3(1.0f, 1.0f, 1.0f));
+            glUniformMatrix4fv(worldMatrixLocation, 1, GL_FALSE, &leafMatrix2[0][0]);
+            glDrawArrays(GL_TRIANGLES, 0, 36);
+
+            glBindTexture(GL_TEXTURE_2D, leaves);
+            mat4 leafMatrix3 = translate(mat4(leafMatrix), vec3(-2.0f, 0.0f, 2.0f)) *
+                scale(mat4(1.0f), vec3(1.0f, 1.0f, 1.0f));
+            glUniformMatrix4fv(worldMatrixLocation, 1, GL_FALSE, &leafMatrix3[0][0]);
+            glDrawArrays(GL_TRIANGLES, 0, 36);
+
+            glBindTexture(GL_TEXTURE_2D, leaves);
+            mat4 leafMatrix4 = translate(mat4(leafMatrix), vec3(2.0f, 0.0f, 2.0f)) *
+                scale(mat4(1.0f), vec3(1.0f, 1.0f, 1.0f));
+            glUniformMatrix4fv(worldMatrixLocation, 1, GL_FALSE, &leafMatrix4[0][0]);
+            glDrawArrays(GL_TRIANGLES, 0, 36);
+
+            mat4 leafMatrix5 = translate(mat4(leafMatrix), vec3(-2.0f, 0.0f, -2.0f)) *
+                scale(mat4(1.0f), vec3(1.0f, 1.0f, 1.0f));
+            glUniformMatrix4fv(worldMatrixLocation, 1, GL_FALSE, &leafMatrix5[0][0]);
+            glDrawArrays(GL_TRIANGLES, 0, 36);
+
+            glBindTexture(GL_TEXTURE_2D, leaves);
+            mat4 leafMatrix6 = translate(mat4(leafMatrix), vec3(2.0f, 0.0f, -2.0f)) *
+                scale(mat4(1.0f), vec3(1.0f, 1.0f, 1.0f));
+            glUniformMatrix4fv(worldMatrixLocation, 1, GL_FALSE, &leafMatrix6[0][0]);
+            glDrawArrays(GL_TRIANGLES, 0, 36);
+
+            glBindTexture(GL_TEXTURE_2D, leaves);
+            mat4 leafMatrix7 = translate(mat4(leafMatrix), vec3(0.0f, 0.0f, 2.0f)) *
+                scale(mat4(1.0f), vec3(1.0f, 1.0f, 1.0f));
+            glUniformMatrix4fv(worldMatrixLocation, 1, GL_FALSE, &leafMatrix7[0][0]);
+            glDrawArrays(GL_TRIANGLES, 0, 36);
+
+            glBindTexture(GL_TEXTURE_2D, leaves);
+            mat4 leafMatrix8 = translate(mat4(leafMatrix), vec3(0.0f, 0.0f, -2.0f)) *
+                scale(mat4(1.0f), vec3(1.0f, 1.0f, 1.0f));
+            glUniformMatrix4fv(worldMatrixLocation, 1, GL_FALSE, &leafMatrix8[0][0]);
+            glDrawArrays(GL_TRIANGLES, 0, 36);
+
+            mat4 leafMatrix9 = translate(mat4(leafMatrix), vec3(1.0f, 2.0f, 1.0f)) *
+                scale(mat4(1.0f), vec3(1.0f, 1.0f, 1.0f));
+            glUniformMatrix4fv(worldMatrixLocation, 1, GL_FALSE, &leafMatrix9[0][0]);
+            glDrawArrays(GL_TRIANGLES, 0, 36);
+
+            glBindTexture(GL_TEXTURE_2D, leaves);
+            mat4 leafMatrix10 = translate(mat4(leafMatrix), vec3(-1.0f, 2.0f, -1.0f)) *
+                scale(mat4(1.0f), vec3(1.0f, 1.0f, 1.0f));
+            glUniformMatrix4fv(worldMatrixLocation, 1, GL_FALSE, &leafMatrix10[0][0]);
+            glDrawArrays(GL_TRIANGLES, 0, 36);
+
+            glBindTexture(GL_TEXTURE_2D, leaves);
+            mat4 leafMatrix11 = translate(mat4(leafMatrix), vec3(1.0f, 2.0f, -1.0f)) *
+                scale(mat4(1.0f), vec3(1.0f, 1.0f, 1.0f));
+            glUniformMatrix4fv(worldMatrixLocation, 1, GL_FALSE, &leafMatrix11[0][0]);
+            glDrawArrays(GL_TRIANGLES, 0, 36);
+
+            glBindTexture(GL_TEXTURE_2D, leaves);
+            mat4 leafMatrix12 = translate(mat4(leafMatrix), vec3(-1.0f, 2.0f, 1.0f)) *
+                scale(mat4(1.0f), vec3(1.0f, 1.0f, 1.0f));
+            glUniformMatrix4fv(worldMatrixLocation, 1, GL_FALSE, &leafMatrix12[0][0]);
+            glDrawArrays(GL_TRIANGLES, 0, 36);
+
+            glBindTexture(GL_TEXTURE_2D, leaves);
+            mat4 leafMatrix14 = translate(mat4(leafMatrix), vec3(0.0f, 4.0f, 0.0f)) *
+                scale(mat4(1.0f), vec3(1.0f, 1.0f, 1.0f));
+            glUniformMatrix4fv(worldMatrixLocation, 1, GL_FALSE, &leafMatrix14[0][0]);
+            glDrawArrays(GL_TRIANGLES, 0, 36);
+
+            //wood
+            glBindTexture(GL_TEXTURE_2D, wood);
+            mat4 woodMatrix = translate(mat4(1.0f), vec3(0.0f, 0.0f, 0.0f)) *
+                scale(mat4(1.0f), vec3(1.6f, 1.6f, 1.6f));
+            glUniformMatrix4fv(worldMatrixLocation, 1, GL_FALSE, &woodMatrix[0][0]);
+            glDrawArrays(GL_TRIANGLES, 0, 36);
+
+            glBindTexture(GL_TEXTURE_2D, wood);
+            mat4 woodMatrix1 = translate(mat4(woodMatrix), vec3(0.0f, 2.0f, 0.0f)) *
+                scale(mat4(1.0f), vec3(1.0f, 1.0f, 1.0f));
+            glUniformMatrix4fv(worldMatrixLocation, 1, GL_FALSE, &woodMatrix1[0][0]);
+            glDrawArrays(GL_TRIANGLES, 0, 36);
+
+            glBindTexture(GL_TEXTURE_2D, wood);
+            mat4 woodMatrix2 = translate(mat4(woodMatrix), vec3(0.0f, 4.0f, 0.0f)) *
+                scale(mat4(1.0f), vec3(1.0f, 1.0f, 1.0f));
+            glUniformMatrix4fv(worldMatrixLocation, 1, GL_FALSE, &woodMatrix2[0][0]);
+            glDrawArrays(GL_TRIANGLES, 0, 36);
 
         } {
             glUseProgram(shaderShadow);
@@ -313,6 +441,25 @@ int main(int argc, char* argv[])
             glClear(GL_DEPTH_BUFFER_BIT);
             // Bind geometry
             glBindTexture(GL_TEXTURE_2D, depth_map_texture); 
+
+            glBindVertexArray(texturedCubeVAO);
+            glBindTexture(GL_TEXTURE_2D, groundTexture);
+            mat4 groundMatrix = translate(mat4(1.0f), vec3(0.0f, -1.0f, 0.0f)) *
+                scale(mat4(1.0f), vec3(50.0f, 0.2f, 50.0f));
+            glUniformMatrix4fv(worldMatrixLocation, 1, GL_FALSE, &groundMatrix[0][0]);
+            SetUniformMat4(shaderShadow, "model_matrix", groundMatrix);
+            glDrawArrays(GL_TRIANGLES, 0, 36);
+
+
+
+            glBindTexture(GL_TEXTURE_2D, leaves);
+            mat4 leafMatrix = translate(mat4(1.0f), vec3(0.0f, 0.0f, 0.0f)) *
+                scale(mat4(1.0f), vec3(12.0f, 12.0f, 12.0f));
+            glUniformMatrix4fv(worldMatrixLocation, 1, GL_FALSE, &leafMatrix[0][0]);
+            SetUniformMat4(shaderShadow, "model_matrix", leafMatrix);
+            glDrawArrays(GL_TRIANGLES, 0, 36);
+
+
         }
 
         glfwSwapBuffers(window);
@@ -391,20 +538,20 @@ int main(int argc, char* argv[])
         glfwGetCursorPos(window, &mousePosX, &mousePosY);
 
 
-        if (glfwGetKey(window, GLFW_KEY_A) == GLFW_PRESS) {
-            mode_angle -= 1.1f * dt;
-        }
-        if (glfwGetKey(window, GLFW_KEY_D) == GLFW_PRESS) {
-            mode_angle += 1.1f * dt;
-        }
-        if (glfwGetKey(window, GLFW_KEY_W) == GLFW_PRESS) {
-            mode_X += 4.4f * dt;
-            cameraPosition += vec3(0.4f, 0.0f, 0.0f) * dt;
-        }
-        if (glfwGetKey(window, GLFW_KEY_S) == GLFW_PRESS) {
-            mode_X -= 4.4f * dt;
-            cameraPosition -= vec3(0.4f, 0.0f, 0.0f) * dt;
-        }
+        //if (glfwGetKey(window, GLFW_KEY_A) == GLFW_PRESS) {
+        //    mode_angle -= 1.1f * dt;
+        //}
+        //if (glfwGetKey(window, GLFW_KEY_D) == GLFW_PRESS) {
+        //    mode_angle += 1.1f * dt;
+        //}
+        //if (glfwGetKey(window, GLFW_KEY_W) == GLFW_PRESS) {
+        //    mode_X += 4.4f * dt;
+        //    cameraPosition += vec3(0.4f, 0.0f, 0.0f) * dt;
+        //}
+        //if (glfwGetKey(window, GLFW_KEY_S) == GLFW_PRESS) {
+        //    mode_X -= 4.4f * dt;
+        //    cameraPosition -= vec3(0.4f, 0.0f, 0.0f) * dt;
+        //}
         if (glfwGetKey(window, GLFW_KEY_Q) == GLFW_PRESS) {
             mode_Y += 4.4f * dt;
         }
@@ -470,19 +617,19 @@ int main(int argc, char* argv[])
         glm::normalize(cameraSideVector);
 
         // Use camera lookat and side vectors to update positions with ASDW
-        if (glfwGetKey(window, GLFW_KEY_1) == GLFW_PRESS) {
+        if (glfwGetKey(window, GLFW_KEY_W) == GLFW_PRESS) {
             cameraPosition += cameraLookAt * dt * currentCameraSpeed;
         }
 
-        if (glfwGetKey(window, GLFW_KEY_2) == GLFW_PRESS) {
+        if (glfwGetKey(window, GLFW_KEY_S) == GLFW_PRESS) {
             cameraPosition -= cameraLookAt * dt * currentCameraSpeed;
         }
 
-        if (glfwGetKey(window, GLFW_KEY_3) == GLFW_PRESS) {
+        if (glfwGetKey(window, GLFW_KEY_A) == GLFW_PRESS) {
             cameraPosition += cameraSideVector * dt * currentCameraSpeed;
         }
 
-        if (glfwGetKey(window, GLFW_KEY_4) == GLFW_PRESS) {
+        if (glfwGetKey(window, GLFW_KEY_D) == GLFW_PRESS) {
             cameraPosition -= cameraSideVector * dt * currentCameraSpeed;
         }
         lastMousePosX = mousePosX;
