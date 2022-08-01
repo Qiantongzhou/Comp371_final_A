@@ -47,19 +47,46 @@ int main(int argc, char* argv[])
 
     //Setup models
     //string heraclesPath = "assets/models/sphereb.obj";
-    string yeziPath = localdirectory + "assets/models/cube.obj";
-    string treePath = localdirectory + "assets/models/allGrass_001.obj";
+    //tree1
+    string leaves01Path = localdirectory + "assets/models/leaves01.obj";
+    string tree1Path = localdirectory + "assets/models/tree1.obj";
+    //tree2
+    string leaves03Path = localdirectory + "assets/models/leaves03.obj";
 
-    int yeziVertices;
-    int treeVertices;
-    GLuint yeziEBO = setupModelEBO(yeziPath, yeziVertices);
-    GLuint treeEBO = setupModelEBO(treePath, treeVertices);
+
+
+    string grassPath = localdirectory + "assets/models/allGrass_001.obj";
+
+    //
+    int leaves01Vertices;
+    int grassVertices;
+    int tree1Vertices;
+    int leaves03Vertices;
+    GLuint leaves01EBO = setupModelEBO(leaves01Path, leaves01Vertices);
+    GLuint leaves03EBO = setupModelEBO(leaves03Path, leaves03Vertices);
+    GLuint grassEBO = setupModelEBO(grassPath, grassVertices);
+    GLuint tree1EBO = setupModelEBO(tree1Path, tree1Vertices);
+
+    //leaves
+    GLuint leaves01Texture = loadTexture(localdirectory + "assets/texture/leaves01.png");
+    GLuint leaves02Texture = loadTexture(localdirectory + "assets/texture/leaves02.png");
+    GLuint leaves03Texture = loadTexture(localdirectory + "assets/texture/leaves03.png");
+
 
     GLuint wood = loadTexture(localdirectory + "assets/texture/wood1.png");
-    GLuint leaves = loadTexture(localdirectory + "assets/texture/leaf4.png");
-    GLuint grass = loadTexture(localdirectory + "assets/texture/grass.png");
-    GLuint groundTexture = loadTexture(localdirectory + "assets/texture/ground.png");
+    GLuint wood2Texture = loadTexture(localdirectory + "assets/texture/wood2.png");
+    GLuint metalTexture = loadTexture(localdirectory + "assets/texture/metal.png");
 
+
+
+    GLuint woodTree1Texture = loadTexture(localdirectory + "assets/texture/woodTree1.jpg");
+
+
+    GLuint grassTexture = loadTexture(localdirectory + "assets/texture/grass.png");
+    GLuint groundTexture = loadTexture(localdirectory + "assets/texture/ground.png");
+    GLuint houseTexture1 = loadTexture(localdirectory + "assets/texture/Diffuse.png");
+    GLuint houseTexture2 = loadTexture(localdirectory + "assets/texture/Diffuse_AO.png");
+    GLuint houseTexture3 = loadTexture(localdirectory + "assets/texture/Emission.png");
 
     GLuint texturedCubeVAO = createTexturedCubeVertexArrayObject();
 
@@ -102,15 +129,40 @@ int main(int argc, char* argv[])
     GLuint worldMatrixLocation = glGetUniformLocation(texturedShaderProgram, "worldMatrix");
     vector<mode1*> entitys;
     
-    mode1* yezi = new mode1(EBO, yeziEBO, leaves, yeziVertices, 1.0, 1.0, 1.0);
+    mode1* leaves01 = new mode1(EBO, leaves01EBO, leaves03Texture, leaves01Vertices, 1.0, 1.0, 1.0);
+    mode1* leaves03 = new mode1(EBO, leaves03EBO, leaves03Texture, leaves03Vertices, 1.0, 1.0, 1.0);
 
-    mode1* tree = new mode1(EBO, treeEBO, grass, treeVertices, 1.0, 1.0, 1.0);
+    mode1* tree1 = new mode1(EBO, tree1EBO, wood, tree1Vertices, 1.0, 1.0, 1.0);
+    mode1* tree2 = new mode1(EBO, tree1EBO, wood, tree1Vertices, 1.0, 1.0, 1.0);
 
-    yezi->Setmode(worldMatrixLocation, mat4(1.0f), 0.0, 1.0, 0.0, 1.0);
-    entitys.push_back(yezi);
+    mode1* grass1 = new mode1(EBO, grassEBO, grassTexture, grassVertices, 1.0, 1.0, 1.0);
 
-    tree->Setmode(worldMatrixLocation, mat4(1.0f), 0.5, 0.0, 0.0, 1.0);
-    entitys.push_back(tree);
+    //leaves01->Setmode(worldMatrixLocation, mat4(1.0f), 1.0, 0.0, 0.0, 0.0);
+    //entitys.push_back(leaves01);
+    //tree1->Setmode(worldMatrixLocation, mat4(1.0f), 1.0, 0.0, 0.0, 0.0);
+    //entitys.push_back(tree1);
+
+
+    leaves03->Setmode(worldMatrixLocation, mat4(1.0f), 1.0, 0.0, -10.0, 0.0);
+    entitys.push_back(leaves03);
+    tree2->Setmode(worldMatrixLocation, mat4(1.0f), 0.25, 0.0, 0.0, 0.0);
+    entitys.push_back(tree2);
+
+
+    
+
+    grass1->Setmode(worldMatrixLocation, mat4(1.0f), 0.2, 0.0, 0.0, 0.0);
+    entitys.push_back(grass1);
+
+    float grassX = -50.0;
+    float grassZ = -50.0;
+    for (int i = 0; i <= 20; i++) {
+
+
+        //grassZ += 10.0;
+        grassX += 10.0;
+    }
+
 
 
 
@@ -291,6 +343,146 @@ int main(int argc, char* argv[])
         setLightMatrix(texturedShaderProgram, lightSpaceMatrix);
 
         GLuint worldMatrixLocation = glGetUniformLocation(texturedShaderProgram, "worldMatrix");
+
+        {
+            glUseProgram(shaderShadow);
+            // Use proper image output size
+            glViewport(0, 0, DEPTH_MAP_TEXTURE_SIZE, DEPTH_MAP_TEXTURE_SIZE);
+            // Bind depth map texture as output framebuffer
+            glBindFramebuffer(GL_FRAMEBUFFER, depth_map_fbo);
+            // Clear depth data on the framebuffer
+            glClear(GL_DEPTH_BUFFER_BIT);
+            // Bind geometry
+            glBindTexture(GL_TEXTURE_2D, depth_map_texture);
+
+            glBindVertexArray(texturedCubeVAO);
+            glBindTexture(GL_TEXTURE_2D, groundTexture);
+            mat4 groundMatrix = translate(mat4(1.0f), vec3(0.0f, -1.0f, 0.0f)) *
+                scale(mat4(1.0f), vec3(50.0f, 0.2f, 50.0f));
+            glUniformMatrix4fv(worldMatrixLocation, 1, GL_FALSE, &groundMatrix[0][0]);
+            SetUniformMat4(shaderShadow, "model_matrix", groundMatrix);
+            glDrawArrays(GL_TRIANGLES, 0, 36);
+
+
+            //leaf
+            glBindTexture(GL_TEXTURE_2D, leaves01Texture);
+            mat4 leafMatrix = translate(mat4(1.0f), vec3(0.0f, 9.0f, 0.0f)) *
+                scale(mat4(1.0f), vec3(2.0f, 2.0f, 2.0f));
+            glUniformMatrix4fv(worldMatrixLocation, 1, GL_FALSE, &leafMatrix[0][0]);
+            SetUniformMat4(shaderShadow, "model_matrix", leafMatrix);
+            glDrawArrays(GL_TRIANGLES, 0, 36);
+
+
+            mat4 leafMatrix1 = translate(mat4(leafMatrix), vec3(2.0f, 0.0f, 0.0f)) *
+                scale(mat4(1.0f), vec3(1.0f, 1.0f, 1.0f));
+            glUniformMatrix4fv(worldMatrixLocation, 1, GL_FALSE, &leafMatrix1[0][0]);
+            SetUniformMat4(shaderShadow, "model_matrix", leafMatrix1);
+            glDrawArrays(GL_TRIANGLES, 0, 36);
+
+
+            mat4 leafMatrix2 = translate(mat4(leafMatrix), vec3(-2.0f, 0.0f, 0.0f)) *
+                scale(mat4(1.0f), vec3(1.0f, 1.0f, 1.0f));
+            glUniformMatrix4fv(worldMatrixLocation, 1, GL_FALSE, &leafMatrix2[0][0]);
+            SetUniformMat4(shaderShadow, "model_matrix", leafMatrix2);
+            glDrawArrays(GL_TRIANGLES, 0, 36);
+
+            mat4 leafMatrix3 = translate(mat4(leafMatrix), vec3(-2.0f, 0.0f, 2.0f)) *
+                scale(mat4(1.0f), vec3(1.0f, 1.0f, 1.0f));
+            glUniformMatrix4fv(worldMatrixLocation, 1, GL_FALSE, &leafMatrix3[0][0]);
+            SetUniformMat4(shaderShadow, "model_matrix", leafMatrix3);
+            glDrawArrays(GL_TRIANGLES, 0, 36);
+
+
+            mat4 leafMatrix4 = translate(mat4(leafMatrix), vec3(2.0f, 0.0f, 2.0f)) *
+                scale(mat4(1.0f), vec3(1.0f, 1.0f, 1.0f));
+            glUniformMatrix4fv(worldMatrixLocation, 1, GL_FALSE, &leafMatrix4[0][0]);
+            SetUniformMat4(shaderShadow, "model_matrix", leafMatrix4);
+            glDrawArrays(GL_TRIANGLES, 0, 36);
+
+            mat4 leafMatrix5 = translate(mat4(leafMatrix), vec3(-2.0f, 0.0f, -2.0f)) *
+                scale(mat4(1.0f), vec3(1.0f, 1.0f, 1.0f));
+            glUniformMatrix4fv(worldMatrixLocation, 1, GL_FALSE, &leafMatrix5[0][0]);
+            SetUniformMat4(shaderShadow, "model_matrix", leafMatrix5);
+            glDrawArrays(GL_TRIANGLES, 0, 36);
+
+            mat4 leafMatrix6 = translate(mat4(leafMatrix), vec3(2.0f, 0.0f, -2.0f)) *
+                scale(mat4(1.0f), vec3(1.0f, 1.0f, 1.0f));
+            glUniformMatrix4fv(worldMatrixLocation, 1, GL_FALSE, &leafMatrix6[0][0]);
+            SetUniformMat4(shaderShadow, "model_matrix", leafMatrix6);
+            glDrawArrays(GL_TRIANGLES, 0, 36);
+
+
+            mat4 leafMatrix7 = translate(mat4(leafMatrix), vec3(0.0f, 0.0f, 2.0f)) *
+                scale(mat4(1.0f), vec3(1.0f, 1.0f, 1.0f));
+            glUniformMatrix4fv(worldMatrixLocation, 1, GL_FALSE, &leafMatrix7[0][0]);
+            SetUniformMat4(shaderShadow, "model_matrix", leafMatrix7);
+            glDrawArrays(GL_TRIANGLES, 0, 36);
+
+
+            mat4 leafMatrix8 = translate(mat4(leafMatrix), vec3(0.0f, 0.0f, -2.0f)) *
+                scale(mat4(1.0f), vec3(1.0f, 1.0f, 1.0f));
+            glUniformMatrix4fv(worldMatrixLocation, 1, GL_FALSE, &leafMatrix8[0][0]);
+            SetUniformMat4(shaderShadow, "model_matrix", leafMatrix8);
+            glDrawArrays(GL_TRIANGLES, 0, 36);
+
+            mat4 leafMatrix9 = translate(mat4(leafMatrix), vec3(1.0f, 2.0f, 1.0f)) *
+                scale(mat4(1.0f), vec3(1.0f, 1.0f, 1.0f));
+            glUniformMatrix4fv(worldMatrixLocation, 1, GL_FALSE, &leafMatrix9[0][0]);
+            SetUniformMat4(shaderShadow, "model_matrix", leafMatrix9);
+            glDrawArrays(GL_TRIANGLES, 0, 36);
+
+
+            mat4 leafMatrix10 = translate(mat4(leafMatrix), vec3(-1.0f, 2.0f, -1.0f)) *
+                scale(mat4(1.0f), vec3(1.0f, 1.0f, 1.0f));
+            glUniformMatrix4fv(worldMatrixLocation, 1, GL_FALSE, &leafMatrix10[0][0]);
+            SetUniformMat4(shaderShadow, "model_matrix", leafMatrix10);
+            glDrawArrays(GL_TRIANGLES, 0, 36);
+
+            mat4 leafMatrix11 = translate(mat4(leafMatrix), vec3(1.0f, 2.0f, -1.0f)) *
+                scale(mat4(1.0f), vec3(1.0f, 1.0f, 1.0f));
+            glUniformMatrix4fv(worldMatrixLocation, 1, GL_FALSE, &leafMatrix11[0][0]);
+            SetUniformMat4(shaderShadow, "model_matrix", leafMatrix11);
+            glDrawArrays(GL_TRIANGLES, 0, 36);
+
+            mat4 leafMatrix12 = translate(mat4(leafMatrix), vec3(-1.0f, 2.0f, 1.0f)) *
+                scale(mat4(1.0f), vec3(1.0f, 1.0f, 1.0f));
+            glUniformMatrix4fv(worldMatrixLocation, 1, GL_FALSE, &leafMatrix12[0][0]);
+            SetUniformMat4(shaderShadow, "model_matrix", leafMatrix12);
+            glDrawArrays(GL_TRIANGLES, 0, 36);
+
+            mat4 leafMatrix14 = translate(mat4(leafMatrix), vec3(0.0f, 4.0f, 0.0f)) *
+                scale(mat4(1.0f), vec3(1.0f, 1.0f, 1.0f));
+            glUniformMatrix4fv(worldMatrixLocation, 1, GL_FALSE, &leafMatrix14[0][0]);
+            SetUniformMat4(shaderShadow, "model_matrix", leafMatrix14);
+            glDrawArrays(GL_TRIANGLES, 0, 36);
+
+            //wood
+            glBindTexture(GL_TEXTURE_2D, wood);
+            mat4 woodMatrix = translate(mat4(leafMatrix), vec3(0.0f, -2.0f, 0.0f)) *
+                scale(mat4(1.0f), vec3(1.6f, 1.6f, 1.6f));
+            glUniformMatrix4fv(worldMatrixLocation, 1, GL_FALSE, &woodMatrix[0][0]);
+            SetUniformMat4(shaderShadow, "model_matrix", woodMatrix);
+            glDrawArrays(GL_TRIANGLES, 0, 36);
+
+            glBindTexture(GL_TEXTURE_2D, wood);
+            mat4 woodMatrix1 = translate(mat4(woodMatrix), vec3(0.0f, 2.0f, 0.0f)) *
+                scale(mat4(1.0f), vec3(1.0f, 1.0f, 1.0f));
+            glUniformMatrix4fv(worldMatrixLocation, 1, GL_FALSE, &woodMatrix1[0][0]);
+            SetUniformMat4(shaderShadow, "model_matrix", woodMatrix1);
+            glDrawArrays(GL_TRIANGLES, 0, 36);
+
+            glBindTexture(GL_TEXTURE_2D, wood);
+            mat4 woodMatrix2 = translate(mat4(woodMatrix), vec3(0.0f, 4.0f, 0.0f)) *
+                scale(mat4(1.0f), vec3(1.0f, 1.0f, 1.0f));
+            glUniformMatrix4fv(worldMatrixLocation, 1, GL_FALSE, &woodMatrix2[0][0]);
+            SetUniformMat4(shaderShadow, "model_matrix", woodMatrix2);
+            glDrawArrays(GL_TRIANGLES, 0, 36);
+
+
+        }
+
+
+
         {
             glUseProgram(texturedShaderProgram);
             // Use proper image output size
@@ -303,6 +495,7 @@ int main(int argc, char* argv[])
             // Clear color and depth data on framebuffer
             glClearColor(0.8f, 0.8f, 0.8f, 1.0f);
             glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+
             //vector print
             for (mode1* i : entitys) {
                 i->printmode();
@@ -330,31 +523,30 @@ int main(int argc, char* argv[])
 
 
             //leaf
-            glBindTexture(GL_TEXTURE_2D, leaves);
-            mat4 leafMatrix = translate(mat4(1.0f), vec3(0.0f, 9.0f, 0.0f)) *
+            glBindTexture(GL_TEXTURE_2D, leaves01Texture);
+            mat4 leafMatrix = translate(mat4(1.0f), vec3(30.0f, 9.0f, 0.0f))*
                 scale(mat4(1.0f), vec3(2.0f, 2.0f, 2.0f));
             glUniformMatrix4fv(worldMatrixLocation, 1, GL_FALSE, &leafMatrix[0][0]);
             glDrawArrays(GL_TRIANGLES, 0, 36);
 
-            glBindTexture(GL_TEXTURE_2D, leaves);
+ 
             mat4 leafMatrix1 = translate(mat4(leafMatrix), vec3(2.0f, 0.0f, 0.0f)) *
                 scale(mat4(1.0f), vec3(1.0f, 1.0f, 1.0f));
             glUniformMatrix4fv(worldMatrixLocation, 1, GL_FALSE, &leafMatrix1[0][0]);
             glDrawArrays(GL_TRIANGLES, 0, 36);
 
-            glBindTexture(GL_TEXTURE_2D, leaves);
+  
             mat4 leafMatrix2 = translate(mat4(leafMatrix), vec3(-2.0f, 0.0f, 0.0f)) *
                 scale(mat4(1.0f), vec3(1.0f, 1.0f, 1.0f));
             glUniformMatrix4fv(worldMatrixLocation, 1, GL_FALSE, &leafMatrix2[0][0]);
             glDrawArrays(GL_TRIANGLES, 0, 36);
 
-            glBindTexture(GL_TEXTURE_2D, leaves);
+    
             mat4 leafMatrix3 = translate(mat4(leafMatrix), vec3(-2.0f, 0.0f, 2.0f)) *
                 scale(mat4(1.0f), vec3(1.0f, 1.0f, 1.0f));
             glUniformMatrix4fv(worldMatrixLocation, 1, GL_FALSE, &leafMatrix3[0][0]);
             glDrawArrays(GL_TRIANGLES, 0, 36);
 
-            glBindTexture(GL_TEXTURE_2D, leaves);
             mat4 leafMatrix4 = translate(mat4(leafMatrix), vec3(2.0f, 0.0f, 2.0f)) *
                 scale(mat4(1.0f), vec3(1.0f, 1.0f, 1.0f));
             glUniformMatrix4fv(worldMatrixLocation, 1, GL_FALSE, &leafMatrix4[0][0]);
@@ -365,19 +557,16 @@ int main(int argc, char* argv[])
             glUniformMatrix4fv(worldMatrixLocation, 1, GL_FALSE, &leafMatrix5[0][0]);
             glDrawArrays(GL_TRIANGLES, 0, 36);
 
-            glBindTexture(GL_TEXTURE_2D, leaves);
             mat4 leafMatrix6 = translate(mat4(leafMatrix), vec3(2.0f, 0.0f, -2.0f)) *
                 scale(mat4(1.0f), vec3(1.0f, 1.0f, 1.0f));
             glUniformMatrix4fv(worldMatrixLocation, 1, GL_FALSE, &leafMatrix6[0][0]);
             glDrawArrays(GL_TRIANGLES, 0, 36);
 
-            glBindTexture(GL_TEXTURE_2D, leaves);
             mat4 leafMatrix7 = translate(mat4(leafMatrix), vec3(0.0f, 0.0f, 2.0f)) *
                 scale(mat4(1.0f), vec3(1.0f, 1.0f, 1.0f));
             glUniformMatrix4fv(worldMatrixLocation, 1, GL_FALSE, &leafMatrix7[0][0]);
             glDrawArrays(GL_TRIANGLES, 0, 36);
 
-            glBindTexture(GL_TEXTURE_2D, leaves);
             mat4 leafMatrix8 = translate(mat4(leafMatrix), vec3(0.0f, 0.0f, -2.0f)) *
                 scale(mat4(1.0f), vec3(1.0f, 1.0f, 1.0f));
             glUniformMatrix4fv(worldMatrixLocation, 1, GL_FALSE, &leafMatrix8[0][0]);
@@ -388,25 +577,21 @@ int main(int argc, char* argv[])
             glUniformMatrix4fv(worldMatrixLocation, 1, GL_FALSE, &leafMatrix9[0][0]);
             glDrawArrays(GL_TRIANGLES, 0, 36);
 
-            glBindTexture(GL_TEXTURE_2D, leaves);
             mat4 leafMatrix10 = translate(mat4(leafMatrix), vec3(-1.0f, 2.0f, -1.0f)) *
                 scale(mat4(1.0f), vec3(1.0f, 1.0f, 1.0f));
             glUniformMatrix4fv(worldMatrixLocation, 1, GL_FALSE, &leafMatrix10[0][0]);
             glDrawArrays(GL_TRIANGLES, 0, 36);
 
-            glBindTexture(GL_TEXTURE_2D, leaves);
             mat4 leafMatrix11 = translate(mat4(leafMatrix), vec3(1.0f, 2.0f, -1.0f)) *
                 scale(mat4(1.0f), vec3(1.0f, 1.0f, 1.0f));
             glUniformMatrix4fv(worldMatrixLocation, 1, GL_FALSE, &leafMatrix11[0][0]);
             glDrawArrays(GL_TRIANGLES, 0, 36);
 
-            glBindTexture(GL_TEXTURE_2D, leaves);
             mat4 leafMatrix12 = translate(mat4(leafMatrix), vec3(-1.0f, 2.0f, 1.0f)) *
                 scale(mat4(1.0f), vec3(1.0f, 1.0f, 1.0f));
             glUniformMatrix4fv(worldMatrixLocation, 1, GL_FALSE, &leafMatrix12[0][0]);
             glDrawArrays(GL_TRIANGLES, 0, 36);
 
-            glBindTexture(GL_TEXTURE_2D, leaves);
             mat4 leafMatrix14 = translate(mat4(leafMatrix), vec3(0.0f, 4.0f, 0.0f)) *
                 scale(mat4(1.0f), vec3(1.0f, 1.0f, 1.0f));
             glUniformMatrix4fv(worldMatrixLocation, 1, GL_FALSE, &leafMatrix14[0][0]);
@@ -414,53 +599,26 @@ int main(int argc, char* argv[])
 
             //wood
             glBindTexture(GL_TEXTURE_2D, wood);
-            mat4 woodMatrix = translate(mat4(1.0f), vec3(0.0f, 0.0f, 0.0f)) *
-                scale(mat4(1.0f), vec3(1.6f, 1.6f, 1.6f));
+            mat4 woodMatrix = translate(mat4(leafMatrix), vec3(0.0f, -2.0f, 0.0f)) *
+                scale(mat4(1.0f), vec3(0.8f, 0.8f, 0.8f));
             glUniformMatrix4fv(worldMatrixLocation, 1, GL_FALSE, &woodMatrix[0][0]);
             glDrawArrays(GL_TRIANGLES, 0, 36);
 
             glBindTexture(GL_TEXTURE_2D, wood);
-            mat4 woodMatrix1 = translate(mat4(woodMatrix), vec3(0.0f, 2.0f, 0.0f)) *
+            mat4 woodMatrix1 = translate(mat4(woodMatrix), vec3(0.0f, -2.0f, 0.0f)) *
                 scale(mat4(1.0f), vec3(1.0f, 1.0f, 1.0f));
             glUniformMatrix4fv(worldMatrixLocation, 1, GL_FALSE, &woodMatrix1[0][0]);
             glDrawArrays(GL_TRIANGLES, 0, 36);
 
             glBindTexture(GL_TEXTURE_2D, wood);
-            mat4 woodMatrix2 = translate(mat4(woodMatrix), vec3(0.0f, 4.0f, 0.0f)) *
+            mat4 woodMatrix2 = translate(mat4(woodMatrix), vec3(0.0f, -4.0f, 0.0f)) *
                 scale(mat4(1.0f), vec3(1.0f, 1.0f, 1.0f));
             glUniformMatrix4fv(worldMatrixLocation, 1, GL_FALSE, &woodMatrix2[0][0]);
             glDrawArrays(GL_TRIANGLES, 0, 36);
 
-        } {
-            glUseProgram(shaderShadow);
-            // Use proper image output size
-            glViewport(0, 0, DEPTH_MAP_TEXTURE_SIZE, DEPTH_MAP_TEXTURE_SIZE);
-            // Bind depth map texture as output framebuffer
-            glBindFramebuffer(GL_FRAMEBUFFER, depth_map_fbo);
-            // Clear depth data on the framebuffer
-            glClear(GL_DEPTH_BUFFER_BIT);
-            // Bind geometry
-            glBindTexture(GL_TEXTURE_2D, depth_map_texture); 
-
-            glBindVertexArray(texturedCubeVAO);
-            glBindTexture(GL_TEXTURE_2D, groundTexture);
-            mat4 groundMatrix = translate(mat4(1.0f), vec3(0.0f, -1.0f, 0.0f)) *
-                scale(mat4(1.0f), vec3(50.0f, 0.2f, 50.0f));
-            glUniformMatrix4fv(worldMatrixLocation, 1, GL_FALSE, &groundMatrix[0][0]);
-            SetUniformMat4(shaderShadow, "model_matrix", groundMatrix);
-            glDrawArrays(GL_TRIANGLES, 0, 36);
+        } 
 
 
-
-            glBindTexture(GL_TEXTURE_2D, leaves);
-            mat4 leafMatrix = translate(mat4(1.0f), vec3(0.0f, 0.0f, 0.0f)) *
-                scale(mat4(1.0f), vec3(12.0f, 12.0f, 12.0f));
-            glUniformMatrix4fv(worldMatrixLocation, 1, GL_FALSE, &leafMatrix[0][0]);
-            SetUniformMat4(shaderShadow, "model_matrix", leafMatrix);
-            glDrawArrays(GL_TRIANGLES, 0, 36);
-
-
-        }
 
         glfwSwapBuffers(window);
         glfwPollEvents();
