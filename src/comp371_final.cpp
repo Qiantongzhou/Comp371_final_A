@@ -47,25 +47,39 @@ int main(int argc, char* argv[])
 
     //Setup models
     //string heraclesPath = "assets/models/sphereb.obj";
-    //tree1
+    //tree
+    string treebranch1Path = localdirectory + "assets/models/tree1.obj";
+    string treebranch2Path = localdirectory + "assets/models/tree2.obj";
+    //leaves
     string leaves01Path = localdirectory + "assets/models/leaves01.obj";
-    string tree1Path = localdirectory + "assets/models/tree1.obj";
-    //tree2
+    string leaves02Path = localdirectory + "assets/models/leaves02.obj";
     string leaves03Path = localdirectory + "assets/models/leaves03.obj";
-
-
-
+    string leaves04Path = localdirectory + "assets/models/leaves04.obj";
+    //grass
     string grassPath = localdirectory + "assets/models/allGrass_001.obj";
 
-    //
+    //leaves
     int leaves01Vertices;
-    int grassVertices;
-    int tree1Vertices;
+    int leaves02Vertices;
     int leaves03Vertices;
+    int leaves04Vertices;
     GLuint leaves01EBO = setupModelEBO(leaves01Path, leaves01Vertices);
+    GLuint leaves02EBO = setupModelEBO(leaves02Path, leaves02Vertices);
     GLuint leaves03EBO = setupModelEBO(leaves03Path, leaves03Vertices);
+    GLuint leaves04EBO = setupModelEBO(leaves04Path, leaves04Vertices);
+
+
+    int treebranch1Vertices;
+    int treebranch2Vertices;
+
+    int grassVertices;
+
+
+
+    GLuint treebranch1EBO = setupModelEBO(treebranch1Path, treebranch1Vertices);
+    GLuint treebranch2EBO = setupModelEBO(treebranch2Path, treebranch2Vertices);
+
     GLuint grassEBO = setupModelEBO(grassPath, grassVertices);
-    GLuint tree1EBO = setupModelEBO(tree1Path, tree1Vertices);
 
     //leaves
     GLuint leaves01Texture = loadTexture(localdirectory + "assets/texture/leaves01.png");
@@ -132,21 +146,27 @@ int main(int argc, char* argv[])
     mode1* leaves01 = new mode1(EBO, leaves01EBO, leaves03Texture, leaves01Vertices, 1.0, 1.0, 1.0);
     mode1* leaves03 = new mode1(EBO, leaves03EBO, leaves03Texture, leaves03Vertices, 1.0, 1.0, 1.0);
 
-    mode1* tree1 = new mode1(EBO, tree1EBO, wood, tree1Vertices, 1.0, 1.0, 1.0);
-    mode1* tree2 = new mode1(EBO, tree1EBO, wood, tree1Vertices, 1.0, 1.0, 1.0);
+    mode1* treebranch1 = new mode1(EBO, treebranch1EBO, wood, treebranch1Vertices, 1.0, 1.0, 1.0);
+    mode1* treebranch2 = new mode1(EBO, treebranch1EBO, wood, treebranch1Vertices, 1.0, 1.0, 1.0);
+    mode1* treebranch3 = new mode1(EBO, treebranch2EBO, wood, treebranch2Vertices, 1.0, 1.0, 1.0);
 
     mode1* grass1 = new mode1(EBO, grassEBO, grassTexture, grassVertices, 1.0, 1.0, 1.0);
 
-    //leaves01->Setmode(worldMatrixLocation, mat4(1.0f), 1.0, 0.0, 0.0, 0.0);
-    //entitys.push_back(leaves01);
-    //tree1->Setmode(worldMatrixLocation, mat4(1.0f), 1.0, 0.0, 0.0, 0.0);
-    //entitys.push_back(tree1);
 
+
+    leaves01->Setmode(worldMatrixLocation, mat4(1.0f), 0.4, -30.0, 0.0, 0.0);
+    entitys.push_back(leaves01);
+    treebranch1->Setmode(worldMatrixLocation, mat4(1.0f), 0.4, -30.0, 0.0, 0.0);
+    entitys.push_back(treebranch1);
 
     leaves03->Setmode(worldMatrixLocation, mat4(1.0f), 1.0, 0.0, -10.0, 0.0);
     entitys.push_back(leaves03);
-    tree2->Setmode(worldMatrixLocation, mat4(1.0f), 0.25, 0.0, 0.0, 0.0);
-    entitys.push_back(tree2);
+    treebranch2->Setmode(worldMatrixLocation, mat4(1.0f), 0.25, 0.0, 0.0, 0.0);
+    entitys.push_back(treebranch2);
+
+
+    //treebranch3->Setmode(worldMatrixLocation, mat4(1.0f), 0.25, 0.0, -60.0, 0.0);
+    //entitys.push_back(treebranch3);
 
 
     
@@ -267,16 +287,16 @@ int main(int argc, char* argv[])
         if (spolt) {
             // light parameters
             lightPosition = //  vec3(0.6f,50.0f,5.0f); // the location of the light in 3D space
-                vec3(0.0, 50.0, 10.0);
+                vec3(0.0, 30.0, 30.0);
             lightFocus = vec3(.0, 0., 0.);
-            ab = 0.4f;
-            di = 0.3f;
-            spec = 0.2f;
+            ab = 0.6f;
+            di = 0.8f;
+            spec = 0.4f;
             SetUniformVec3(texturedShaderProgram, "light_color", vec3(1.0, 1.0, 1.0));
         }
         else if (camera) {
             lightPosition = //  vec3(0.6f,50.0f,5.0f); // the location of the light in 3D space
-                cameraPosition + vec3(3.0, 10.0, 3.0);
+                cameraPosition + vec3(3.0, 30.0, 20.0);
             lightFocus = cameraLookAt * 200.0f;
             ab = 0.05f;
             di = 0.9f;
@@ -363,7 +383,7 @@ int main(int argc, char* argv[])
             SetUniformMat4(shaderShadow, "model_matrix", groundMatrix);
             glDrawArrays(GL_TRIANGLES, 0, 36);
 
-
+            /*
             //leaf
             glBindTexture(GL_TEXTURE_2D, leaves01Texture);
             mat4 leafMatrix = translate(mat4(1.0f), vec3(0.0f, 9.0f, 0.0f)) *
@@ -477,7 +497,7 @@ int main(int argc, char* argv[])
             glUniformMatrix4fv(worldMatrixLocation, 1, GL_FALSE, &woodMatrix2[0][0]);
             SetUniformMat4(shaderShadow, "model_matrix", woodMatrix2);
             glDrawArrays(GL_TRIANGLES, 0, 36);
-
+            */
 
         }
 
@@ -500,7 +520,7 @@ int main(int argc, char* argv[])
             for (mode1* i : entitys) {
                 i->printmode();
             }
-
+            
             glActiveTexture(GL_TEXTURE0 + 1);
             glBindVertexArray(texturedCubeVAO);
             //ground
@@ -521,7 +541,7 @@ int main(int argc, char* argv[])
                 groundZ = -50.0f;
             }
 
-
+            /*
             //leaf
             glBindTexture(GL_TEXTURE_2D, leaves01Texture);
             mat4 leafMatrix = translate(mat4(1.0f), vec3(30.0f, 9.0f, 0.0f))*
@@ -615,7 +635,7 @@ int main(int argc, char* argv[])
                 scale(mat4(1.0f), vec3(1.0f, 1.0f, 1.0f));
             glUniformMatrix4fv(worldMatrixLocation, 1, GL_FALSE, &woodMatrix2[0][0]);
             glDrawArrays(GL_TRIANGLES, 0, 36);
-
+            */
         } 
 
 
