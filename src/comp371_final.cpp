@@ -58,6 +58,11 @@ int main(int argc, char* argv[])
     //grass
     string grassPath = localdirectory + "assets/models/allGrass_001.obj";
 
+
+    //house
+    string house1Path = localdirectory + "assets/models/house1.obj";
+    string house2Path = localdirectory + "assets/models/house4.obj";
+
     //leaves
     int leaves01Vertices;
     int leaves02Vertices;
@@ -68,39 +73,53 @@ int main(int argc, char* argv[])
     GLuint leaves03EBO = setupModelEBO(leaves03Path, leaves03Vertices);
     GLuint leaves04EBO = setupModelEBO(leaves04Path, leaves04Vertices);
 
-
+    //tree
     int treebranch1Vertices;
     int treebranch2Vertices;
-
-    int grassVertices;
-
-
-
     GLuint treebranch1EBO = setupModelEBO(treebranch1Path, treebranch1Vertices);
     GLuint treebranch2EBO = setupModelEBO(treebranch2Path, treebranch2Vertices);
 
+    //grass
+    int grassVertices;
     GLuint grassEBO = setupModelEBO(grassPath, grassVertices);
 
-    //leaves
+    //house
+    int house1Vertices;
+    int house2Vertices;
+    GLuint house1EBO = setupModelEBO(house1Path, house1Vertices);
+    GLuint house2EBO = setupModelEBO(house2Path, house2Vertices);
+
+
+
+    //leaves texture
     GLuint leaves01Texture = loadTexture(localdirectory + "assets/texture/leaves01.png");
     GLuint leaves02Texture = loadTexture(localdirectory + "assets/texture/leaves02.png");
     GLuint leaves03Texture = loadTexture(localdirectory + "assets/texture/leaves03.png");
+    GLuint leaves04Texture = loadTexture(localdirectory + "assets/texture/leaves04.png");
 
-
+    //wood texture
     GLuint wood = loadTexture(localdirectory + "assets/texture/wood1.png");
     GLuint wood2Texture = loadTexture(localdirectory + "assets/texture/wood2.png");
+    GLuint woodTree1Texture = loadTexture(localdirectory + "assets/texture/woodTree1.jpg");
+
+
     GLuint metalTexture = loadTexture(localdirectory + "assets/texture/metal.png");
 
 
 
-    GLuint woodTree1Texture = loadTexture(localdirectory + "assets/texture/woodTree1.jpg");
 
 
     GLuint grassTexture = loadTexture(localdirectory + "assets/texture/grass.png");
     GLuint groundTexture = loadTexture(localdirectory + "assets/texture/ground.png");
+    //house texture
     GLuint houseTexture1 = loadTexture(localdirectory + "assets/texture/Diffuse.png");
-    GLuint houseTexture2 = loadTexture(localdirectory + "assets/texture/Diffuse_AO.png");
-    GLuint houseTexture3 = loadTexture(localdirectory + "assets/texture/Emission.png");
+    GLuint houseTexture2 = loadTexture(localdirectory + "assets/texture/house2.png");
+    GLuint houseTexture3 = loadTexture(localdirectory + "assets/texture/house3.png");
+    GLuint houseTexture4 = loadTexture(localdirectory + "assets/texture/house4.png");
+
+
+    //color
+    GLuint whiteTexture = loadTexture(localdirectory + "assets/texture/white.png");
 
     GLuint texturedCubeVAO = createTexturedCubeVertexArrayObject();
 
@@ -144,16 +163,23 @@ int main(int argc, char* argv[])
     vector<mode1*> entitys;
     
     mode1* leaves01 = new mode1(EBO, leaves01EBO, leaves03Texture, leaves01Vertices, 1.0, 1.0, 1.0);
-    mode1* leaves03 = new mode1(EBO, leaves03EBO, leaves03Texture, leaves03Vertices, 1.0, 1.0, 1.0);
+    mode1* leaves02 = new mode1(EBO, leaves02EBO, leaves03Texture, leaves02Vertices, 1.0, 1.0, 1.0);
+    mode1* leaves03 = new mode1(EBO, leaves03EBO, leaves02Texture, leaves03Vertices, 1.0, 1.0, 1.0);
+    mode1* leaves04 = new mode1(EBO, leaves04EBO, leaves04Texture, leaves04Vertices, 1.0, 1.0, 1.0);
 
     mode1* treebranch1 = new mode1(EBO, treebranch1EBO, wood, treebranch1Vertices, 1.0, 1.0, 1.0);
     mode1* treebranch2 = new mode1(EBO, treebranch1EBO, wood, treebranch1Vertices, 1.0, 1.0, 1.0);
-    mode1* treebranch3 = new mode1(EBO, treebranch2EBO, wood, treebranch2Vertices, 1.0, 1.0, 1.0);
+    mode1* treebranch3 = new mode1(EBO, treebranch2EBO, woodTree1Texture, treebranch2Vertices, 1.0, 1.0, 1.0);
+
+
+    mode1* house1 = new mode1(EBO, house1EBO, whiteTexture, house1Vertices, 1.0, 1.0, 1.0);
+    mode1* house2 = new mode1(EBO, house2EBO, houseTexture4, house2Vertices, 1.0, 1.0, 1.0);
+
 
     mode1* grass1 = new mode1(EBO, grassEBO, grassTexture, grassVertices, 1.0, 1.0, 1.0);
 
 
-
+    //tree
     leaves01->Setmode(worldMatrixLocation, mat4(1.0f), 0.4, -30.0, 0.0, 0.0);
     entitys.push_back(leaves01);
     treebranch1->Setmode(worldMatrixLocation, mat4(1.0f), 0.4, -30.0, 0.0, 0.0);
@@ -164,13 +190,20 @@ int main(int argc, char* argv[])
     treebranch2->Setmode(worldMatrixLocation, mat4(1.0f), 0.25, 0.0, 0.0, 0.0);
     entitys.push_back(treebranch2);
 
+    leaves04->Setmode(worldMatrixLocation, mat4(1.0f), 1.0, 0.0, -20.0, 0.0);
+    entitys.push_back(leaves04);
+    treebranch3->Setmode(worldMatrixLocation, mat4(1.0f), 1.0, 0.0, -20.0, 0.0);
+    entitys.push_back(treebranch3);
 
-    //treebranch3->Setmode(worldMatrixLocation, mat4(1.0f), 0.25, 0.0, -60.0, 0.0);
-    //entitys.push_back(treebranch3);
 
+    //house
+    house1->Setmode(worldMatrixLocation, mat4(1.0f), 1.0, 0.0, -20.0, 0.0);
+    entitys.push_back(house1);
+    house2->Setmode(worldMatrixLocation, mat4(1.0f), 0.5, 50.0, 20.0, 0.0);
+    entitys.push_back(house2);
 
     
-
+    //grass
     grass1->Setmode(worldMatrixLocation, mat4(1.0f), 0.2, 0.0, 0.0, 0.0);
     entitys.push_back(grass1);
 
@@ -373,15 +406,25 @@ int main(int argc, char* argv[])
             // Clear depth data on the framebuffer
             glClear(GL_DEPTH_BUFFER_BIT);
             // Bind geometry
-            glBindTexture(GL_TEXTURE_2D, depth_map_texture);
+            glBindTexture(GL_TEXTURE_2D, 0);
 
             glBindVertexArray(texturedCubeVAO);
-            glBindTexture(GL_TEXTURE_2D, groundTexture);
-            mat4 groundMatrix = translate(mat4(1.0f), vec3(0.0f, -1.0f, 0.0f)) *
-                scale(mat4(1.0f), vec3(50.0f, 0.2f, 50.0f));
-            glUniformMatrix4fv(worldMatrixLocation, 1, GL_FALSE, &groundMatrix[0][0]);
-            SetUniformMat4(shaderShadow, "model_matrix", groundMatrix);
-            glDrawArrays(GL_TRIANGLES, 0, 36);
+            mat4 groundMatrix;
+            float groundX = -100.0f;
+            float groundZ = -100.0f;
+            for (int i = 0; i <= 40; i++) {
+                for (int j = 0; j <= 40; j++) {
+                    groundMatrix = translate(mat4(1.0f), vec3(groundX, 0.0f, groundZ)) *
+                        scale(mat4(1.0f), vec3(2.5f, 0.05f, 2.5f));
+                    glUniformMatrix4fv(worldMatrixLocation, 1, GL_FALSE, &groundMatrix[0][0]);
+                    SetUniformMat4(shaderShadow, "model_matrix", groundMatrix);
+                    glDrawArrays(GL_TRIANGLES, 0, 36);
+                    groundZ += 5.0f;
+
+                }
+                groundX += 5.0f;
+                groundZ = -100.0f;
+            }
 
             /*
             //leaf
@@ -526,19 +569,19 @@ int main(int argc, char* argv[])
             //ground
             glBindTexture(GL_TEXTURE_2D, groundTexture);
             mat4 groundMatrix;
-            float groundX = -50.0f;
-            float groundZ = -50.0f;
-            for (int i = 0; i <= 10; i++) {
-                for (int j = 0; j <= 10; j++) {
-                    groundMatrix = translate(mat4(1.0f), vec3(groundX, -1.0f, groundZ)) *
-                        scale(mat4(1.0f), vec3(5.0f, 0.05f, 5.0f));
+            float groundX = -100.0f;
+            float groundZ = -100.0f;
+            for (int i = 0; i <= 40; i++) {
+                for (int j = 0; j <= 40; j++) {
+                    groundMatrix = translate(mat4(1.0f), vec3(groundX, 0.0f, groundZ)) *
+                        scale(mat4(1.0f), vec3(2.5f, 0.05f, 2.5f));
                     glUniformMatrix4fv(worldMatrixLocation, 1, GL_FALSE, &groundMatrix[0][0]);
                     glDrawArrays(GL_TRIANGLES, 0, 36);
-                    groundZ += 10.0f;
+                    groundZ += 5.0f;
 
                 }
-                groundX += 10.0f;
-                groundZ = -50.0f;
+                groundX += 5.0f;
+                groundZ = -100.0f;
             }
 
             /*
@@ -804,11 +847,11 @@ int main(int argc, char* argv[])
         }
 
         if (glfwGetKey(window, GLFW_KEY_A) == GLFW_PRESS) {
-            cameraPosition += cameraSideVector * dt * currentCameraSpeed;
+            cameraPosition -= cameraSideVector * dt * currentCameraSpeed;
         }
 
         if (glfwGetKey(window, GLFW_KEY_D) == GLFW_PRESS) {
-            cameraPosition -= cameraSideVector * dt * currentCameraSpeed;
+            cameraPosition += cameraSideVector * dt * currentCameraSpeed;
         }
         lastMousePosX = mousePosX;
         lastMousePosY = mousePosY;
