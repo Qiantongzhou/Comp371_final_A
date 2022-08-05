@@ -1,0 +1,19 @@
+# ninja log v5
+704	731	6809325485423549	C:/371/Comp371_final_A/out/build/x64-debug/_deps/thirdparty-glm-subbuild/thirdparty-glm-populate-prefix/src/thirdparty-glm-populate-stamp/thirdparty-glm-populate-build	a577ef5f9b14fb93
+0	90	6809325479006282	thirdparty-glm-populate-prefix/src/thirdparty-glm-populate-stamp/thirdparty-glm-populate-mkdir	3f227bbe16ebae66
+0	90	6809325479006282	C:/371/Comp371_final_A/out/build/x64-debug/_deps/thirdparty-glm-subbuild/thirdparty-glm-populate-prefix/src/thirdparty-glm-populate-stamp/thirdparty-glm-populate-mkdir	3f227bbe16ebae66
+90	635	6809325484457912	thirdparty-glm-populate-prefix/src/thirdparty-glm-populate-stamp/thirdparty-glm-populate-download	f0f3ec38ded9c361
+90	635	6809325484457912	C:/371/Comp371_final_A/out/build/x64-debug/_deps/thirdparty-glm-subbuild/thirdparty-glm-populate-prefix/src/thirdparty-glm-populate-stamp/thirdparty-glm-populate-download	f0f3ec38ded9c361
+636	677	6809325484882632	thirdparty-glm-populate-prefix/src/thirdparty-glm-populate-stamp/thirdparty-glm-populate-patch	cb07137074d3e063
+636	677	6809325484882632	C:/371/Comp371_final_A/out/build/x64-debug/_deps/thirdparty-glm-subbuild/thirdparty-glm-populate-prefix/src/thirdparty-glm-populate-stamp/thirdparty-glm-populate-patch	cb07137074d3e063
+677	704	6809325485147565	C:/371/Comp371_final_A/out/build/x64-debug/_deps/thirdparty-glm-subbuild/thirdparty-glm-populate-prefix/src/thirdparty-glm-populate-stamp/thirdparty-glm-populate-configure	ad114ea5bb5c20c2
+677	704	6809325485147565	thirdparty-glm-populate-prefix/src/thirdparty-glm-populate-stamp/thirdparty-glm-populate-configure	ad114ea5bb5c20c2
+704	731	6809325485423549	thirdparty-glm-populate-prefix/src/thirdparty-glm-populate-stamp/thirdparty-glm-populate-build	a577ef5f9b14fb93
+731	757	6809325485683330	thirdparty-glm-populate-prefix/src/thirdparty-glm-populate-stamp/thirdparty-glm-populate-install	c9ce9dfc3499e24e
+731	757	6809325485683330	C:/371/Comp371_final_A/out/build/x64-debug/_deps/thirdparty-glm-subbuild/thirdparty-glm-populate-prefix/src/thirdparty-glm-populate-stamp/thirdparty-glm-populate-install	c9ce9dfc3499e24e
+757	784	6809325485951679	thirdparty-glm-populate-prefix/src/thirdparty-glm-populate-stamp/thirdparty-glm-populate-test	55ef5dc28875a168
+757	784	6809325485951679	C:/371/Comp371_final_A/out/build/x64-debug/_deps/thirdparty-glm-subbuild/thirdparty-glm-populate-prefix/src/thirdparty-glm-populate-stamp/thirdparty-glm-populate-test	55ef5dc28875a168
+784	821	6809325486321965	CMakeFiles/thirdparty-glm-populate-complete	ba0def3c511e0ac6
+784	821	6809325486321965	thirdparty-glm-populate-prefix/src/thirdparty-glm-populate-stamp/thirdparty-glm-populate-done	ba0def3c511e0ac6
+784	821	6809325486321965	C:/371/Comp371_final_A/out/build/x64-debug/_deps/thirdparty-glm-subbuild/CMakeFiles/thirdparty-glm-populate-complete	ba0def3c511e0ac6
+784	821	6809325486321965	C:/371/Comp371_final_A/out/build/x64-debug/_deps/thirdparty-glm-subbuild/thirdparty-glm-populate-prefix/src/thirdparty-glm-populate-stamp/thirdparty-glm-populate-done	ba0def3c511e0ac6

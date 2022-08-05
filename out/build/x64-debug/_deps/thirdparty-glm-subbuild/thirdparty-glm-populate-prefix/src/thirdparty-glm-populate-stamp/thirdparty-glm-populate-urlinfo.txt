@@ -1,0 +1,3 @@
+repository='external project URL'
+module='C:/371/Comp371_final_A/thirdparty/glm-0.9.9.8.zip'
+tag=''

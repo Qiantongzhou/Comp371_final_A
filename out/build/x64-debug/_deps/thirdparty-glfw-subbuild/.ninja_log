@@ -1,0 +1,19 @@
+# ninja log v5
+0	91	6809325470898937	thirdparty-glfw-populate-prefix/src/thirdparty-glfw-populate-stamp/thirdparty-glfw-populate-mkdir	8a11330269c10f91
+91	380	6809325473789969	thirdparty-glfw-populate-prefix/src/thirdparty-glfw-populate-stamp/thirdparty-glfw-populate-download	57bcf1bbd0872c81
+0	91	6809325470898937	C:/371/Comp371_final_A/out/build/x64-debug/_deps/thirdparty-glfw-subbuild/thirdparty-glfw-populate-prefix/src/thirdparty-glfw-populate-stamp/thirdparty-glfw-populate-mkdir	8a11330269c10f91
+512	549	6809325475476904	CMakeFiles/thirdparty-glfw-populate-complete	103c0ed4ee4fb73b
+91	380	6809325473789969	C:/371/Comp371_final_A/out/build/x64-debug/_deps/thirdparty-glfw-subbuild/thirdparty-glfw-populate-prefix/src/thirdparty-glfw-populate-stamp/thirdparty-glfw-populate-download	57bcf1bbd0872c81
+380	407	6809325474056577	thirdparty-glfw-populate-prefix/src/thirdparty-glfw-populate-stamp/thirdparty-glfw-populate-patch	ab44ef9aad1868b4
+407	433	6809325474318841	thirdparty-glfw-populate-prefix/src/thirdparty-glfw-populate-stamp/thirdparty-glfw-populate-configure	a1119c4a37d15e78
+407	433	6809325474318841	C:/371/Comp371_final_A/out/build/x64-debug/_deps/thirdparty-glfw-subbuild/thirdparty-glfw-populate-prefix/src/thirdparty-glfw-populate-stamp/thirdparty-glfw-populate-configure	a1119c4a37d15e78
+380	407	6809325474056577	C:/371/Comp371_final_A/out/build/x64-debug/_deps/thirdparty-glfw-subbuild/thirdparty-glfw-populate-prefix/src/thirdparty-glfw-populate-stamp/thirdparty-glfw-populate-patch	ab44ef9aad1868b4
+433	459	6809325474589988	thirdparty-glfw-populate-prefix/src/thirdparty-glfw-populate-stamp/thirdparty-glfw-populate-build	c529b73b31f1d4c0
+433	459	6809325474589988	C:/371/Comp371_final_A/out/build/x64-debug/_deps/thirdparty-glfw-subbuild/thirdparty-glfw-populate-prefix/src/thirdparty-glfw-populate-stamp/thirdparty-glfw-populate-build	c529b73b31f1d4c0
+459	486	6809325474854824	thirdparty-glfw-populate-prefix/src/thirdparty-glfw-populate-stamp/thirdparty-glfw-populate-install	f41405d67b15d78c
+459	486	6809325474854824	C:/371/Comp371_final_A/out/build/x64-debug/_deps/thirdparty-glfw-subbuild/thirdparty-glfw-populate-prefix/src/thirdparty-glfw-populate-stamp/thirdparty-glfw-populate-install	f41405d67b15d78c
+486	512	6809325475117734	thirdparty-glfw-populate-prefix/src/thirdparty-glfw-populate-stamp/thirdparty-glfw-populate-test	662c611f22d9ae48
+486	512	6809325475117734	C:/371/Comp371_final_A/out/build/x64-debug/_deps/thirdparty-glfw-subbuild/thirdparty-glfw-populate-prefix/src/thirdparty-glfw-populate-stamp/thirdparty-glfw-populate-test	662c611f22d9ae48
+512	549	6809325475476904	thirdparty-glfw-populate-prefix/src/thirdparty-glfw-populate-stamp/thirdparty-glfw-populate-done	103c0ed4ee4fb73b
+512	549	6809325475476904	C:/371/Comp371_final_A/out/build/x64-debug/_deps/thirdparty-glfw-subbuild/CMakeFiles/thirdparty-glfw-populate-complete	103c0ed4ee4fb73b
+512	549	6809325475476904	C:/371/Comp371_final_A/out/build/x64-debug/_deps/thirdparty-glfw-subbuild/thirdparty-glfw-populate-prefix/src/thirdparty-glfw-populate-stamp/thirdparty-glfw-populate-done	103c0ed4ee4fb73b
