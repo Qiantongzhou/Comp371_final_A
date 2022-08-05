@@ -44,26 +44,39 @@ int main(int argc, char* argv[])
 
     GLuint texturedShaderProgram = loadSHADER(shaderPathPrefix + "texturev.glsl", shaderPathPrefix + "texture.glsl");
 
-    string ground = localdirectory + "assets/models/plane.obj";
-    string house1 = localdirectory + "assets/models/p1/house1.obj";
-    string house2 = localdirectory + "assets/models/p1/house2.obj";
-    string house3 = localdirectory + "assets/models/p1/house3.obj";
-    string leaves01 = localdirectory + "assets/models/p1/leaves01.obj";
-    string leaves02 = localdirectory + "assets/models/p1/leaves02.obj";
-    string leaves03 = localdirectory + "assets/models/p1/leaves03.obj";
-    string leaves04 = localdirectory + "assets/models/p1/leaves04.obj";
-    string tree1 = localdirectory + "assets/models/p1/tree1.obj";
-    string tree2 = localdirectory + "assets/models/p1/tree2.obj";
+    string snowGround1Path = localdirectory + "assets/models/snowground1.obj";
+    string house1Path = localdirectory + "assets/models/h1.obj";
+    string house2Path = localdirectory + "assets/models/h2.obj";
+    string house3Path = localdirectory + "assets/models/h3.obj";
+    string fencePath = localdirectory + "assets/models/fence.obj";
+    string barrelPath = localdirectory + "assets/models/barrel.obj";
+    string lampPath = localdirectory + "assets/models/lamp.obj";
+    string logsPath = localdirectory + "assets/models/logs.obj";
+    string tree1Path = localdirectory + "assets/models/tree1.obj";
+    string tree2Path = localdirectory + "assets/models/tree2.obj";
 
 
 
 
 
-    GLuint red = loadTexture(localdirectory + "assets/texture/red.png");
-    GLuint lightmetal = loadTexture(localdirectory + "assets/texture/lightmetal.png");
-    GLuint green = loadTexture(localdirectory + "assets/texture/green.png");
-    GLuint sky = loadTexture(localdirectory + "assets/texture/sky.png");
-    GLuint white = loadTexture(localdirectory + "assets/texture/white.png");
+    //GLuint red = loadTexture(localdirectory + "assets/texture/red.png");
+    //GLuint lightmetal = loadTexture(localdirectory + "assets/texture/lightmetal.png");
+    //GLuint green = loadTexture(localdirectory + "assets/texture/green.png");
+    //GLuint sky = loadTexture(localdirectory + "assets/texture/sky.png");
+    //GLuint white = loadTexture(localdirectory + "assets/texture/white.png");
+
+    GLuint house1Texture = loadTexture(localdirectory + "assets/texture/h1.png");
+    GLuint house2Texture = loadTexture(localdirectory + "assets/texture/h2.png");
+    GLuint house3Texture = loadTexture(localdirectory + "assets/texture/h3.png");
+    GLuint fenceTexture = loadTexture(localdirectory + "assets/texture/fence.png");
+    GLuint barrelTexture = loadTexture(localdirectory + "assets/texture/barrel.png");
+    GLuint lampTexture = loadTexture(localdirectory + "assets/texture/lamp.png");
+    GLuint logsTexture = loadTexture(localdirectory + "assets/texture/logs.png");
+    GLuint tree1Texture = loadTexture(localdirectory + "assets/texture/tree1snow.png");
+    GLuint tree2Texture = loadTexture(localdirectory + "assets/texture/tree2.png");
+
+    GLuint snowGround1Texture = loadTexture(localdirectory + "assets/texture/Ground_1_snowy.png");
+
     const unsigned int DEPTH_MAP_TEXTURE_SIZE = WIDTH;
     glUseProgram(texturedShaderProgram);
     glUniform1i(glGetUniformLocation(texturedShaderProgram, "shadow_map"), 0);
@@ -102,27 +115,51 @@ int main(int argc, char* argv[])
     GLuint worldMatrixLocation = glGetUniformLocation(texturedShaderProgram, "worldMatrix");
     vector<mode1*> entitys;
 
-    mode1* groungA = new mode1(EBO, ground, white, 1.0, 1.0, 1.0);
+    mode1* groungA = new mode1(EBO, snowGround1Path, snowGround1Texture, 1.0, 1.0, 1.0);
     groungA->Setmode(worldMatrixLocation, mat4(1.0f), 1.0, 1.0, 1.0, 1.0, 1.0);
     entitys.push_back(groungA);
 
-    mode1* sphere = new mode1(EBO, localdirectory + "assets/models/sphere.obj", red, 1.0, 1.0, 1.0);
-    sphere->Setmode(worldMatrixLocation, mat4(1.0f), 1.0, 1.0, 1.0, 1.0, 1.0);
-    entitys.push_back(sphere);
+    //mode1* sphere = new mode1(EBO, localdirectory + "assets/models/sphere.obj", red, 1.0, 1.0, 1.0);
+    //sphere->Setmode(worldMatrixLocation, mat4(1.0f), 1.0, 1.0, 1.0, 1.0, 1.0);
+    //entitys.push_back(sphere);
 
-    mode1* houseA = new mode1(EBO, house1, lightmetal, 1.0, 1.0, 1.0);
-    houseA->Setmode(worldMatrixLocation, mat4(1.0f), 1.0, 1.0, 1.0, 1.0, 1.0);
-    entitys.push_back(houseA);
-    mode1* houseB = new mode1(EBO, house2, green, 1.0, 1.0, 1.0);
-    houseB->Setmode(worldMatrixLocation, mat4(1.0f), 1.0, 1.0, 1.0, 1.0, 1.0);
-    entitys.push_back(houseB);
-    mode1* houseC = new mode1(EBO, house3, sky, 1.0, 1.0, 1.0);
-    houseC->Setmode(worldMatrixLocation, mat4(1.0f), 1.0, 1.0, 1.0, 1.0, 1.0);
-    entitys.push_back(houseC);
+    mode1* house1 = new mode1(EBO, house1Path, house1Texture, 1.0, 1.0, 1.0);
+    house1->Setmode(worldMatrixLocation, mat4(1.0f), 1.0, 1.0, 1.0, 1.0, 1.0);
+    entitys.push_back(house1);
+    mode1* house2 = new mode1(EBO, house2Path, house2Texture, 1.0, 1.0, 1.0);
+    house2->Setmode(worldMatrixLocation, mat4(1.0f), 1.0, 1.0, 1.0, 1.0, 1.0);
+    entitys.push_back(house2);
+    mode1* house3 = new mode1(EBO, house3Path, house3Texture, 1.0, 1.0, 1.0);
+    house3->Setmode(worldMatrixLocation, mat4(1.0f), 1.0, 1.0, 1.0, 1.0, 1.0);
+    entitys.push_back(house3);
 
-    mode1* leavesA = new mode1(EBO, leaves01, red, 1.0, 1.0, 1.0);
-    leavesA->Setmode(worldMatrixLocation, mat4(1.0f), 1.0, 1.0, 1.0, 1.0, 1.0);
-    entitys.push_back(leavesA);
+    mode1* fence = new mode1(EBO, fencePath, fenceTexture, 1.0, 1.0, 1.0);
+    fence->Setmode(worldMatrixLocation, mat4(1.0f), 1.0, 1.0, 1.0, 1.0, 1.0);
+    entitys.push_back(fence);
+    mode1* barrel = new mode1(EBO, barrelPath, barrelTexture, 1.0, 1.0, 1.0);
+    barrel->Setmode(worldMatrixLocation, mat4(1.0f), 1.0, 1.0, 1.0, 1.0, 1.0);
+    entitys.push_back(barrel);
+    mode1* lamp = new mode1(EBO, lampPath, lampTexture, 1.0, 1.0, 1.0);
+    lamp->Setmode(worldMatrixLocation, mat4(1.0f), 1.0, 1.0, 1.0, 1.0, 1.0);
+    entitys.push_back(lamp);
+    mode1* logs = new mode1(EBO, logsPath, logsTexture, 1.0, 1.0, 1.0);
+    logs->Setmode(worldMatrixLocation, mat4(1.0f), 1.0, 1.0, 1.0, 1.0, 1.0);
+    entitys.push_back(logs);
+
+    mode1* tree1 = new mode1(EBO, tree1Path, tree1Texture, 1.0, 1.0, 1.0);
+    tree1->Setmode(worldMatrixLocation, mat4(1.0f), 1.0, 1.0, 1.0, 1.0, 1.0);
+    entitys.push_back(tree1);
+    mode1* tree2 = new mode1(EBO, tree1Path, tree2Texture, 1.0, 1.0, 1.0);
+    tree2->Setmode(worldMatrixLocation, mat4(1.0f), 1.0, 1.0, 1.0, 1.0, 1.0);
+    entitys.push_back(tree2);
+
+
+
+    //mode1* leavesA = new mode1(EBO, leaves01, red, 1.0, 1.0, 1.0);
+    //leavesA->Setmode(worldMatrixLocation, mat4(1.0f), 1.0, 1.0, 1.0, 1.0, 1.0);
+    //entitys.push_back(leavesA);
+   
+
     //==============================================================camera==============================================//
     // Camera parameters for view transform
     vec3 cameraPosition(6.0f, 15.0f, 40.0f);
@@ -131,7 +168,7 @@ int main(int argc, char* argv[])
 
     // Other camera parameters
     float cameraSpeed = 5.0f;
-    float cameraFastSpeed = 5 * cameraSpeed;
+    float cameraFastSpeed = 25 * cameraSpeed;
     float cameraHorizontalAngle = 90.0f;
     float cameraVerticalAngle = 0.0f;
 
@@ -211,8 +248,8 @@ int main(int argc, char* argv[])
     bool change2 = false;
     vec3 lightPosition;
     vec3 lightFocus(0.0, 0.0, 0.0);
-    const int mlen = 30;
-    const int mwidth = 30;
+    const int mlen = 1;
+    const int mwidth = 1;
     int map2[mlen][mwidth];
 
     //========================================================================loop===========================================================//
@@ -320,9 +357,9 @@ int main(int argc, char* argv[])
                 change2 = true;
             }
         }
-        if (static_cast<int>(fmod(glfwGetTime(), 6) + 0.5) == 5) {
-            change2 = false;
-        }
+        //if (static_cast<int>(fmod(glfwGetTime(), 6) + 0.5) == 5) {
+        //    change2 = false;
+        //}
 
         int map[8][8] = {
                         {1,0,1,0,1},
@@ -345,36 +382,65 @@ int main(int argc, char* argv[])
             glClearColor(0.1f, 0.1f, 0.1f, 1.0f);
             glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
             //vector print
-
-            entitys[0]->Setmode(worldMatrixLocation, mat4(1.0f), 100.0f, 0.0f, 0.0f, 0.0f, 0.0f);
-            entitys[0]->printmode();
-
-
-
-
-            for (int i = 0; i < mlen; i++) {
-                for (int j = 0; j < mwidth; j++) {
-
-
-                    if (map2[i][j] == 1) {
-                        entitys[2]->Setmode(worldMatrixLocation, mat4(1.0f), 3.0f, -10.0f * mlen + j * 20.0f, 1.0f, -10.0f * mwidth + i * 20.0f, 0.0f);
-                        entitys[2]->printmode();
-                    }
-                    if (map2[i][j] == 2) {
-                        entitys[3]->Setmode(worldMatrixLocation, mat4(1.0f), 1.0f, -10.0f * mlen + j * 20.0f, 1.0f, -10.0f * mwidth + i * 20.0f, 0.0f);
-                        entitys[3]->printmode();
-                    }
-                    if (map2[i][j] == 3) {
-                        entitys[4]->Setmode(worldMatrixLocation, mat4(1.0f), 0.02f, -10.0f * mlen + j * 20.0f, 1.0f, -10.0f * mwidth + i * 20.0f, 0.0f);
-                        entitys[4]->printmode();
-                    }
-                    if (map2[i][j] == 4) {
-                        entitys[5]->Setmode(worldMatrixLocation, mat4(1.0f), 0.2f, -10.0f * mlen + j * 20.0f, -5.0f, -10.0f * mwidth + i * 20.0f, 0.0f);
-                        entitys[5]->printmode();
-                    }
+            int groundX = -200.0f;
+            int groundZ = -200.0f;
+            for (int i = 0; i <= 20; i++) {
+                for (int j = 0; j <= 20; j++) {
+                    entitys[0]->Setmode(worldMatrixLocation, mat4(1.0f), 3.0f, 0.0f + groundX, 0.0f, 0.0f + groundZ, 0.0f);
+                    entitys[0]->printmode();
+                    groundZ += 19.0f;
                 }
+                groundZ = -200.0f;
+                groundX += 19.0f;
             }
 
+
+            //for (int i = 0; i < mlen; i++) {
+            //    for (int j = 0; j < mwidth; j++) {
+
+            //        if (map2[i][j] == 0) {
+            //            entitys[1]->Setmode(worldMatrixLocation, mat4(1.0f), 3.0f, -10.0f * mlen + j * 20.0f, 1.0f, -10.0f * mwidth + i * 20.0f, 0.0f);
+            //            entitys[1]->printmode();
+            //        }
+            //        if (map2[i][j] == 1) {
+            //            entitys[2]->Setmode(worldMatrixLocation, mat4(1.0f), 3.0f, -10.0f * mlen + j * 20.0f, 1.0f, -10.0f * mwidth + i * 20.0f, 0.0f);
+            //            entitys[2]->printmode();
+            //        }
+            //        if (map2[i][j] == 2) {
+            //            entitys[3]->Setmode(worldMatrixLocation, mat4(1.0f), 1.0f, -10.0f * mlen + j * 20.0f, 1.0f, -10.0f * mwidth + i * 20.0f, 0.0f);
+            //            entitys[3]->printmode();
+            //        }
+            //        if (map2[i][j] == 3) {
+            //            entitys[4]->Setmode(worldMatrixLocation, mat4(1.0f), 20.0f, -10.0f * mlen + j * 20.0f, 1.0f, -10.0f * mwidth + i * 20.0f, 0.0f);
+            //            entitys[4]->printmode();
+            //        }
+            //        if (map2[i][j] == 4) {
+            //            entitys[5]->Setmode(worldMatrixLocation, mat4(1.0f), 20.0f, -10.0f * mlen + j * 20.0f, 1.0f, -10.0f * mwidth + i * 20.0f, 0.0f);
+            //            entitys[5]->printmode();
+            //        }
+            //        if (map2[i][j] == 5) {
+            //            entitys[6]->Setmode(worldMatrixLocation, mat4(1.0f), 20.0f, -10.0f * mlen + j * 20.0f, 1.0f, -10.0f * mwidth + i * 20.0f, 0.0f);
+            //            entitys[6]->printmode();
+            //        }
+            //    }
+            //}
+
+            entitys[1]->Setmode(worldMatrixLocation, mat4(1.0f), 1.0f, -50.0f, 1.0f, -10.0f, 0.0f);
+            entitys[1]->printmode();
+            entitys[2]->Setmode(worldMatrixLocation, mat4(1.0f), 1.0f, -25.0f, 1.0f, -10.0f, 0.0f);
+            entitys[2]->printmode();
+            entitys[3]->Setmode(worldMatrixLocation, mat4(1.0f), 1.0f, 0.0f, 1.0f, -10.0f, 0.0f);
+            entitys[3]->printmode();
+            entitys[4]->Setmode(worldMatrixLocation, mat4(1.0f), 15.0f, 25.0f, 1.0f, -10.0f, 0.0f);
+            entitys[4]->printmode();
+            entitys[5]->Setmode(worldMatrixLocation, mat4(1.0f), 15.0f, 50.0f, 1.0f, -10.0f, 0.0f);
+            entitys[5]->printmode();
+            entitys[6]->Setmode(worldMatrixLocation, mat4(1.0f), 1.0f, 75.0f, 1.0f, -10.0f, 0.0f);
+            entitys[6]->printmode();
+            entitys[7]->Setmode(worldMatrixLocation, mat4(1.0f), 15.0f, -75.0f, 1.0f, -10.0f, 0.0f);
+            entitys[7]->printmode();
+            entitys[8]->Setmode(worldMatrixLocation, mat4(1.0f), 15.0f, -100.0f, 1.0f, -10.0f, 0.0f);
+            entitys[8]->printmode();
 
         } {
             glUseProgram(shaderShadow);
@@ -391,28 +457,52 @@ int main(int argc, char* argv[])
                 model->changeProgram(worldMatrixLocation);
             }
 
-            for (int i = 0; i < mlen; i++) {
-                for (int j = 0; j < mwidth; j++) {
+            //for (int i = 0; i < mlen; i++) {
+            //    for (int j = 0; j < mwidth; j++) {
+            //        if (map[i][j] == 0) {
+            //            entitys[1]->Setmode(worldMatrixLocation, mat4(1.0f), 1.0f, -10.0f * mlen + j * 20.0f, 1.0f, -10.0f * mwidth + i * 20.0f, 0.0f);
+            //            entitys[1]->printmodeshadow();
+            //        }
+            //        if (map[i][j] == 1) {
+            //            entitys[2]->Setmode(worldMatrixLocation, mat4(1.0f), 1.0f, -10.0f * mlen + j * 20.0f, 1.0f, -10.0f * mwidth + i * 20.0f, 0.0f);
+            //            entitys[2]->printmodeshadow();
+            //        }
+            //        if (map[i][j] == 2) {
+            //            entitys[3]->Setmode(worldMatrixLocation, mat4(1.0f), 1.0f, -10.0f * mlen + j * 20.0f, 1.0f, -10.0f * mwidth + i * 20.0f, 0.0f);
+            //            entitys[3]->printmodeshadow();
+            //        }
+            //        if (map[i][j] == 3) {
+            //            entitys[4]->Setmode(worldMatrixLocation, mat4(1.0f), 20.0f, -10.0f * mlen + j * 20.0f, 1.0f, -10.0f * mwidth + i * 20.0f, 0.0f);
+            //            entitys[4]->printmodeshadow();
+            //        }
+            //        if (map[i][j] == 4) {
+            //            entitys[5]->Setmode(worldMatrixLocation, mat4(1.0f), 20.0f, -10.0f * mlen + j * 20.0f, 1.0f, -10.0f * mwidth + i * 20.0f, 0.0f);
+            //            entitys[5]->printmodeshadow();
+            //        }
+            //        if (map[i][j] == 5) {
+            //            entitys[6]->Setmode(worldMatrixLocation, mat4(1.0f), 20.0f, -10.0f * mlen + j * 20.0f, 1.0f, -10.0f * mwidth + i * 20.0f, 0.0f);
+            //            entitys[6]->printmodeshadow();
+            //        }
+            //    }
+            //}
 
 
-                    if (map[i][j] == 1) {
-                        entitys[2]->Setmode(worldMatrixLocation, mat4(1.0f), 3.0f, -10.0f * mlen + j * 20.0f, 1.0f, -10.0f * mwidth + i * 20.0f, 0.0f);
-                        entitys[2]->printmodeshadow();
-                    }
-                    if (map[i][j] == 2) {
-                        entitys[3]->Setmode(worldMatrixLocation, mat4(1.0f), 1.0f, -10.0f * mlen + j * 20.0f, 1.0f, -10.0f * mwidth + i * 20.0f, 0.0f);
-                        entitys[3]->printmodeshadow();
-                    }
-                    if (map[i][j] == 3) {
-                        entitys[4]->Setmode(worldMatrixLocation, mat4(1.0f), 0.02f, -10.0f * mlen + j * 20.0f, 1.0f, -10.0f * mwidth + i * 20.0f, 0.0f);
-                        entitys[4]->printmodeshadow();
-                    }
-                    if (map[i][j] == 4) {
-                        entitys[5]->Setmode(worldMatrixLocation, mat4(1.0f), 0.2f, -10.0f * mlen + j * 20.0f, -5.0f, -10.0f * mwidth + i * 20.0f, 0.0f);
-                        entitys[5]->printmodeshadow();
-                    }
-                }
-            }
+            entitys[1]->Setmode(worldMatrixLocation, mat4(1.0f), 1.0f, -50.0f, 1.0f, -10.0f, 0.0f);
+            entitys[1]->printmodeshadow();
+            entitys[2]->Setmode(worldMatrixLocation, mat4(1.0f), 1.0f, -25.0f, 1.0f, -10.0f, 0.0f);
+            entitys[2]->printmodeshadow();
+            entitys[3]->Setmode(worldMatrixLocation, mat4(1.0f), 1.0f, 0.0f, 1.0f, -10.0f, 0.0f);
+            entitys[3]->printmodeshadow();
+            entitys[4]->Setmode(worldMatrixLocation, mat4(1.0f), 15.0f, 25.0f, 1.0f, -10.0f, 0.0f);
+            entitys[4]->printmodeshadow();
+            entitys[5]->Setmode(worldMatrixLocation, mat4(1.0f), 15.0f, 50.0f, 1.0f, -10.0f, 0.0f);
+            entitys[5]->printmodeshadow();
+            entitys[6]->Setmode(worldMatrixLocation, mat4(1.0f), 1.0f, 75.0f, 1.0f, -10.0f, 0.0f);
+            entitys[6]->printmodeshadow();
+            entitys[7]->Setmode(worldMatrixLocation, mat4(1.0f), 15.0f, -75.0f, 1.0f, -10.0f, 0.0f);
+            entitys[7]->printmodeshadow();
+            entitys[8]->Setmode(worldMatrixLocation, mat4(1.0f), 15.0f, -100.0f, 1.0f, -10.0f, 0.0f);
+            entitys[8]->printmodeshadow();
         }
 
         glfwSwapBuffers(window);
@@ -488,20 +578,20 @@ int main(int argc, char* argv[])
         glfwGetCursorPos(window, &mousePosX, &mousePosY);
 
 
-        if (glfwGetKey(window, GLFW_KEY_A) == GLFW_PRESS) {
-            mode_angle -= 1.1f * dt;
-        }
-        if (glfwGetKey(window, GLFW_KEY_D) == GLFW_PRESS) {
-            mode_angle += 1.1f * dt;
-        }
-        if (glfwGetKey(window, GLFW_KEY_W) == GLFW_PRESS) {
-            mode_X += 4.4f * dt;
-            cameraPosition += vec3(0.4f, 0.0f, 0.0f) * dt;
-        }
-        if (glfwGetKey(window, GLFW_KEY_S) == GLFW_PRESS) {
-            mode_X -= 4.4f * dt;
-            cameraPosition -= vec3(0.4f, 0.0f, 0.0f) * dt;
-        }
+        //if (glfwGetKey(window, GLFW_KEY_A) == GLFW_PRESS) {
+        //    mode_angle -= 1.1f * dt;
+        //}
+        //if (glfwGetKey(window, GLFW_KEY_D) == GLFW_PRESS) {
+        //    mode_angle += 1.1f * dt;
+        //}
+        //if (glfwGetKey(window, GLFW_KEY_W) == GLFW_PRESS) {
+        //    mode_X += 4.4f * dt;
+        //    cameraPosition += vec3(0.4f, 0.0f, 0.0f) * dt;
+        //}
+        //if (glfwGetKey(window, GLFW_KEY_S) == GLFW_PRESS) {
+        //    mode_X -= 4.4f * dt;
+        //    cameraPosition -= vec3(0.4f, 0.0f, 0.0f) * dt;
+        //}
         if (glfwGetKey(window, GLFW_KEY_Q) == GLFW_PRESS) {
             mode_Y += 4.4f * dt;
         }
@@ -567,19 +657,19 @@ int main(int argc, char* argv[])
         glm::normalize(cameraSideVector);
 
         // Use camera lookat and side vectors to update positions with ASDW
-        if (glfwGetKey(window, GLFW_KEY_1) == GLFW_PRESS) {
+        if (glfwGetKey(window, GLFW_KEY_W) == GLFW_PRESS) {
             cameraPosition += cameraLookAt * dt * currentCameraSpeed;
         }
 
-        if (glfwGetKey(window, GLFW_KEY_2) == GLFW_PRESS) {
+        if (glfwGetKey(window, GLFW_KEY_S) == GLFW_PRESS) {
             cameraPosition -= cameraLookAt * dt * currentCameraSpeed;
         }
 
-        if (glfwGetKey(window, GLFW_KEY_3) == GLFW_PRESS) {
+        if (glfwGetKey(window, GLFW_KEY_D) == GLFW_PRESS) {
             cameraPosition += cameraSideVector * dt * currentCameraSpeed;
         }
 
-        if (glfwGetKey(window, GLFW_KEY_4) == GLFW_PRESS) {
+        if (glfwGetKey(window, GLFW_KEY_A) == GLFW_PRESS) {
             cameraPosition -= cameraSideVector * dt * currentCameraSpeed;
         }
         lastMousePosX = mousePosX;

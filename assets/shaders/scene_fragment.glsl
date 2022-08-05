@@ -21,12 +21,9 @@ uniform vec3 view_position;
 
 uniform sampler2D shadow_map;
 
-uniform sampler2D textureSampler;
-
 in vec3 fragment_position;
 in vec4 fragment_position_light_space;
 in vec3 fragment_normal;
-in vec2 vertexUV;
 
 in vec4 gl_FragCoord;
 
@@ -80,15 +77,13 @@ void main()
     vec3 ambient = vec3(0.0f);
     vec3 diffuse = vec3(0.0f);
     vec3 specular = vec3(0.0f);
-    vec3 textureColor;
 
     float scalar = shadow_scalar() * spotlight_scalar();
     ambient = ambient_color(light_color);
     diffuse = scalar * diffuse_color(light_color, light_position);
     specular = scalar * specular_color(light_color, light_position);
-    textureColor = texture( textureSampler, vertexUV ).rgb;
     
-    vec3 color = (specular + diffuse + ambient) *object_color* textureColor;
+    vec3 color = (specular + diffuse + ambient) * object_color;
     
     result = vec4(color, 1.0f);
 }

@@ -17,9 +17,9 @@
         
         void main()
         {
-        	fragment_normal = mat3(worldMatrix)* normals;
-        	fragment_position = vec3(worldMatrix *vec4(aPos,1.0f));
-        	fragment_position_light_space = lightMatrix *vec4(fragment_position,1.0f);
+          fragment_normal = mat3(worldMatrix)* normals;
+          fragment_position = vec3(worldMatrix *vec4(aPos,1.0f));
+          fragment_position_light_space = lightMatrix *vec4(fragment_position,1.0f);
           mat4 modelViewProjection = projectionMatrix * viewMatrix * worldMatrix;
           gl_Position = modelViewProjection * vec4(aPos.x, aPos.y, aPos.z, 1.0);
           vertexUV = aUV;
