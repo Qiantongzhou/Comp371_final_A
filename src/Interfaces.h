@@ -69,8 +69,7 @@ GLuint setupModelEBO(string path, int& vertexCount)
     //We won't be needing the normals or UVs for this program
    
         const char* pathf = path.c_str();
-        bool load=loadobj(pathf, vertexIndices, vertices, normals, UVs);
-    
+        bool load =loadobj(pathf, vertexIndices, vertices, normals, UVs);
         if (!load) {
             glfwTerminate();
             exit(0);
@@ -89,13 +88,19 @@ GLuint setupModelEBO(string path, int& vertexCount)
     glEnableVertexAttribArray(0);
 
     //Normals VBO setup
-    GLuint normals_VBO;
-    glGenBuffers(1, &normals_VBO);
-    glBindBuffer(GL_ARRAY_BUFFER, normals_VBO);
-    glBufferData(GL_ARRAY_BUFFER, normals.size() * sizeof(glm::vec3), &normals.front(), GL_STATIC_DRAW);
-    glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(GLfloat), (GLvoid*)0);
-    glEnableVertexAttribArray(1);
-
+    if (normals.size() != 0) {
+        GLuint normals_VBO;
+        glGenBuffers(1, &normals_VBO);
+        glBindBuffer(GL_ARRAY_BUFFER, normals_VBO);
+        glBufferData(GL_ARRAY_BUFFER, normals.size() * sizeof(glm::vec3), &normals.front(), GL_STATIC_DRAW);
+        glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(GLfloat), (GLvoid*)0);
+        glEnableVertexAttribArray(1);
+    }
+    else {
+        cout << "obj no normal! reject? ";
+        glfwTerminate();
+        exit(0);
+    }
     //UVs VBO setup
     if (UVs.size() != 0) {
         GLuint uvs_VBO;

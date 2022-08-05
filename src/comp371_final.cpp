@@ -44,25 +44,26 @@ int main(int argc, char* argv[])
 
     GLuint texturedShaderProgram = loadSHADER(shaderPathPrefix + "texturev.glsl", shaderPathPrefix + "texture.glsl");
 
-
-    //Setup models
-    //string heraclesPath = "assets/models/sphereb.obj";
-    string conePath = localdirectory + "assets/models/cone.obj";
-    string spherePath = localdirectory + "assets/models/sphere.obj";
-    int sphereVertices;
-    GLuint sphereEBO = setupModelEBO(spherePath, sphereVertices);
-
-    int coneVertices;
-    GLuint coneEBO = setupModelEBO(conePath, coneVertices);
-
+    string ground = localdirectory + "assets/models/plane.obj";
+    string house1 = localdirectory + "assets/models/p1/house1.obj";
+    string house2 = localdirectory + "assets/models/p1/house2.obj";
+    string house3 = localdirectory + "assets/models/p1/house3.obj";
+    string leaves01 = localdirectory + "assets/models/p1/leaves01.obj";
+    string leaves02 = localdirectory + "assets/models/p1/leaves02.obj";
+    string leaves03 = localdirectory + "assets/models/p1/leaves03.obj";
+    string leaves04 = localdirectory + "assets/models/p1/leaves04.obj";
+    string tree1 = localdirectory + "assets/models/p1/tree1.obj";
+    string tree2 = localdirectory + "assets/models/p1/tree2.obj";
+  
 
 
 
 
     GLuint red = loadTexture(localdirectory + "assets/texture/red.png");
-    GLuint texturedCubeVAO = createTexturedCubeVertexArrayObject();
-
-
+    GLuint lightmetal = loadTexture(localdirectory + "assets/texture/lightmetal.png");
+    GLuint green = loadTexture(localdirectory + "assets/texture/green.png");
+    GLuint sky = loadTexture(localdirectory + "assets/texture/sky.png");
+    GLuint white = loadTexture(localdirectory + "assets/texture/white.png");
     const unsigned int DEPTH_MAP_TEXTURE_SIZE = WIDTH;
     glUseProgram(texturedShaderProgram);
     glUniform1i(glGetUniformLocation(texturedShaderProgram, "shadow_map"), 0);
@@ -101,15 +102,27 @@ int main(int argc, char* argv[])
     GLuint worldMatrixLocation = glGetUniformLocation(texturedShaderProgram, "worldMatrix");
     vector<mode1*> entitys;
     
-    mode1* cone = new mode1(EBO, coneEBO, red, coneVertices, 1.0, 1.0, 1.0);
+    mode1* groungA = new mode1(EBO, ground, white, 1.0, 1.0, 1.0);
+    groungA->Setmode(worldMatrixLocation, mat4(1.0f), 1.0, 1.0, 1.0, 1.0,1.0);
+    entitys.push_back(groungA);
 
-    cone->Setmode(worldMatrixLocation, mat4(1.0f), 1.0, 1.0, 1.0, 1.0);
-    entitys.push_back(cone);
-
-    mode1* sphere = new mode1(EBO, sphereEBO, red, sphereVertices, 1.0, 1.0, 1.0);
-    sphere->Setmode(worldMatrixLocation, mat4(1.0f), 1.0, 1.0, 1.0, 1.0);
+    mode1* sphere = new mode1(EBO, localdirectory + "assets/models/sphere.obj", red, 1.0, 1.0, 1.0);
+    sphere->Setmode(worldMatrixLocation, mat4(1.0f), 1.0, 1.0, 1.0, 1.0,1.0);
     entitys.push_back(sphere);
 
+    mode1* houseA = new mode1(EBO, house1, lightmetal, 1.0, 1.0, 1.0);
+    houseA->Setmode(worldMatrixLocation, mat4(1.0f), 1.0, 1.0, 1.0, 1.0,1.0);
+    entitys.push_back(houseA);
+    mode1* houseB = new mode1(EBO, house2, green, 1.0, 1.0, 1.0);
+    houseB->Setmode(worldMatrixLocation, mat4(1.0f), 1.0, 1.0, 1.0, 1.0, 1.0);
+    entitys.push_back(houseB);
+    mode1* houseC = new mode1(EBO, house3, sky, 1.0, 1.0, 1.0);
+    houseC->Setmode(worldMatrixLocation, mat4(1.0f), 1.0, 1.0, 1.0, 1.0, 1.0);
+    entitys.push_back(houseC);
+
+    mode1* leavesA = new mode1(EBO, leaves01, red, 1.0, 1.0, 1.0);
+    leavesA->Setmode(worldMatrixLocation, mat4(1.0f), 1.0, 1.0, 1.0, 1.0, 1.0);
+    entitys.push_back(leavesA);
     //==============================================================camera==============================================//
     // Camera parameters for view transform
     vec3 cameraPosition(6.0f, 15.0f, 40.0f);
@@ -195,10 +208,13 @@ int main(int argc, char* argv[])
     bool camera = false;
     bool dj = false;
     bool change = false;
+    bool change2 = false;
     vec3 lightPosition;
     vec3 lightFocus(0.0, 0.0, 0.0);
-
-
+    const int mlen = 30;
+    const int mwidth = 30;
+    int map2[mlen][mwidth];
+   
 //========================================================================loop===========================================================//
     while (!glfwWindowShouldClose(window)) {
         // Frame time calculation
@@ -212,9 +228,9 @@ int main(int argc, char* argv[])
             lightPosition = //  vec3(0.6f,50.0f,5.0f); // the location of the light in 3D space
                 vec3(0.0, 50.0, 10.0);
             lightFocus = vec3(.0, 0., 0.);
-            ab = 0.4f;
-            di = 0.3f;
-            spec = 0.2f;
+            ab = 0.6f;
+            di = 0.1f;
+            spec = 0.1f;
             SetUniformVec3(texturedShaderProgram, "light_color", vec3(1.0, 1.0, 1.0));
         }
         else if (camera) {
@@ -286,6 +302,36 @@ int main(int argc, char* argv[])
         setLightMatrix(texturedShaderProgram, lightSpaceMatrix);
 
         GLuint worldMatrixLocation = glGetUniformLocation(texturedShaderProgram, "worldMatrix");
+       
+        if (static_cast<int>(fmod(glfwGetTime(), 6) + 0.5) == 1) {
+            if (!change2) {
+                for (int i = 0; i < mlen; i++) {
+                    for (int j = 0; j < mwidth; j++) {
+                        map2[i][j] = rand() % 10;
+                    }
+                }
+                for (int i = 0; i < mlen; i++) {
+                    printf("{");
+                    for (int j = 0; j < mwidth; j++) {
+                        cout << map2[i][j] << ",";
+                    }
+                    cout << "}\n";
+                }
+                change2 = true;
+            }
+        }
+        if (static_cast<int>(fmod(glfwGetTime(), 6) + 0.5) == 5) {
+            change2 = false;
+        }
+
+        int map[8][8] = {
+                        {1,0,1,0,1},
+                        {3,0,1,0,0},
+                        {2,2,1,2,2},
+                        {0,0,1,4,0},
+                        {1,1,1,1,1}
+
+        };
         {
             glUseProgram(texturedShaderProgram);
             // Use proper image output size
@@ -299,9 +345,36 @@ int main(int argc, char* argv[])
             glClearColor(0.1f, 0.1f, 0.1f, 1.0f);
             glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
             //vector print
-            for (mode1* i : entitys) {
-                i->printmode();
-            }
+           
+            entitys[0]->Setmode(worldMatrixLocation, mat4(1.0f), 100.0f,0.0f,0.0f,0.0f,0.0f);
+            entitys[0]->printmode();
+
+            
+
+            
+                for (int i = 0; i < mlen; i++) {
+                    for (int j = 0; j < mwidth; j++) {
+                        
+                       
+                        if (map2[i][j] == 1) {
+                            entitys[2]->Setmode(worldMatrixLocation, mat4(1.0f), 3.0f, -10.0f*mlen + j * 20.0f, 1.0f, -10.0f*mwidth + i * 20.0f, 0.0f);
+                            entitys[2]->printmode();
+                        }
+                        if (map2[i][j] == 2) {
+                            entitys[3]->Setmode(worldMatrixLocation, mat4(1.0f), 1.0f, -10.0f * mlen + j * 20.0f, 1.0f, -10.0f * mwidth + i * 20.0f, 0.0f);
+                            entitys[3]->printmode();
+                        }
+                        if (map2[i][j] == 3) {
+                            entitys[4]->Setmode(worldMatrixLocation, mat4(1.0f), 0.02f, -10.0f * mlen + j * 20.0f, 1.0f, -10.0f * mwidth + i * 20.0f, 0.0f);
+                            entitys[4]->printmode();
+                        }
+                        if (map2[i][j] == 4) {
+                            entitys[5]->Setmode(worldMatrixLocation, mat4(1.0f), 0.2f, -10.0f * mlen + j * 20.0f, -5.0f, -10.0f * mwidth + i * 20.0f, 0.0f);
+                            entitys[5]->printmode();
+                        }
+                    }
+                }
+            
 
         } {
             glUseProgram(shaderShadow);
@@ -314,9 +387,31 @@ int main(int argc, char* argv[])
             // Bind geometry
             glBindTexture(GL_TEXTURE_2D, depth_map_texture); 
             GLuint worldMatrixLocation = glGetUniformLocation(shaderShadow, "model_matrix");
-            for (mode1* i : entitys) {
-                i->changeProgram(worldMatrixLocation);
-                i->printmodeshadow();
+            for (mode1* model : entitys) {
+                model->changeProgram(worldMatrixLocation);
+            }
+
+            for (int i = 0; i < mlen; i++) {
+                for (int j = 0; j < mwidth; j++) {
+
+
+                    if (map[i][j] == 1) {
+                        entitys[2]->Setmode(worldMatrixLocation, mat4(1.0f), 3.0f, -10.0f * mlen + j * 20.0f, 1.0f, -10.0f * mwidth + i * 20.0f, 0.0f);
+                        entitys[2]->printmodeshadow();
+                    }
+                    if (map[i][j] == 2) {
+                        entitys[3]->Setmode(worldMatrixLocation, mat4(1.0f), 1.0f, -10.0f * mlen + j * 20.0f, 1.0f, -10.0f * mwidth + i * 20.0f, 0.0f);
+                        entitys[3]->printmodeshadow();
+                    }
+                    if (map[i][j] == 3) {
+                        entitys[4]->Setmode(worldMatrixLocation, mat4(1.0f), 0.02f, -10.0f * mlen + j * 20.0f, 1.0f, -10.0f * mwidth + i * 20.0f, 0.0f);
+                        entitys[4]->printmodeshadow();
+                    }
+                    if (map[i][j] == 4) {
+                        entitys[5]->Setmode(worldMatrixLocation, mat4(1.0f), 0.2f, -10.0f * mlen + j * 20.0f, -5.0f, -10.0f * mwidth + i * 20.0f, 0.0f);
+                        entitys[5]->printmodeshadow();
+                    }
+                }
             }
         }
 
