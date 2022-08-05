@@ -50,6 +50,7 @@ int main(int argc, char* argv[])
     //tree
     string treebranch1Path = localdirectory + "assets/models/tree1.obj";
     string treebranch2Path = localdirectory + "assets/models/tree2.obj";
+    string treebranch3Path = localdirectory + "assets/models/tree3.obj";
     //leaves
     string leaves01Path = localdirectory + "assets/models/leaves01.obj";
     string leaves02Path = localdirectory + "assets/models/leaves02.obj";
@@ -60,8 +61,8 @@ int main(int argc, char* argv[])
 
 
     //house
-    string house1Path = localdirectory + "assets/models/house1.obj";
-    string house2Path = localdirectory + "assets/models/house4.obj";
+    string house1Path = localdirectory + "assets/models/test2.obj";
+    string house2Path = localdirectory + "assets/models/house5.obj";
 
     //leaves
     int leaves01Vertices;
@@ -76,8 +77,10 @@ int main(int argc, char* argv[])
     //tree
     int treebranch1Vertices;
     int treebranch2Vertices;
+    int treebranch3Vertices;
     GLuint treebranch1EBO = setupModelEBO(treebranch1Path, treebranch1Vertices);
     GLuint treebranch2EBO = setupModelEBO(treebranch2Path, treebranch2Vertices);
+    GLuint treebranch3EBO = setupModelEBO(treebranch3Path, treebranch3Vertices);
 
     //grass
     int grassVertices;
@@ -96,6 +99,7 @@ int main(int argc, char* argv[])
     GLuint leaves02Texture = loadTexture(localdirectory + "assets/texture/leaves02.png");
     GLuint leaves03Texture = loadTexture(localdirectory + "assets/texture/leaves03.png");
     GLuint leaves04Texture = loadTexture(localdirectory + "assets/texture/leaves04.png");
+    GLuint leaves05Texture = loadTexture(localdirectory + "assets/texture/leaves05.png");
 
     //wood texture
     GLuint wood = loadTexture(localdirectory + "assets/texture/wood1.png");
@@ -112,7 +116,7 @@ int main(int argc, char* argv[])
     GLuint grassTexture = loadTexture(localdirectory + "assets/texture/grass.png");
     GLuint groundTexture = loadTexture(localdirectory + "assets/texture/ground.png");
     //house texture
-    GLuint houseTexture1 = loadTexture(localdirectory + "assets/texture/Diffuse.png");
+    GLuint houseTexture1 = loadTexture(localdirectory + "assets/texture/mill.png");
     GLuint houseTexture2 = loadTexture(localdirectory + "assets/texture/house2.png");
     GLuint houseTexture3 = loadTexture(localdirectory + "assets/texture/house3.png");
     GLuint houseTexture4 = loadTexture(localdirectory + "assets/texture/house4.png");
@@ -170,9 +174,10 @@ int main(int argc, char* argv[])
     mode1* treebranch1 = new mode1(EBO, treebranch1EBO, wood, treebranch1Vertices, 1.0, 1.0, 1.0);
     mode1* treebranch2 = new mode1(EBO, treebranch1EBO, wood, treebranch1Vertices, 1.0, 1.0, 1.0);
     mode1* treebranch3 = new mode1(EBO, treebranch2EBO, woodTree1Texture, treebranch2Vertices, 1.0, 1.0, 1.0);
+    mode1* treebranch4 = new mode1(EBO, treebranch3EBO, leaves05Texture, treebranch3Vertices, 1.0, 1.0, 1.0);
 
 
-    mode1* house1 = new mode1(EBO, house1EBO, whiteTexture, house1Vertices, 1.0, 1.0, 1.0);
+    mode1* house1 = new mode1(EBO, house1EBO, houseTexture1, house1Vertices, 1.0, 1.0, 1.0);
     mode1* house2 = new mode1(EBO, house2EBO, houseTexture4, house2Vertices, 1.0, 1.0, 1.0);
 
 
@@ -195,11 +200,14 @@ int main(int argc, char* argv[])
     treebranch3->Setmode(worldMatrixLocation, mat4(1.0f), 1.0, 0.0, -20.0, 0.0);
     entitys.push_back(treebranch3);
 
+    treebranch4->Setmode(worldMatrixLocation, mat4(1.0f), 1.0, 20.0, 40.0, 0.0);
+    entitys.push_back(treebranch4);
+
 
     //house
     house1->Setmode(worldMatrixLocation, mat4(1.0f), 1.0, 0.0, -20.0, 0.0);
     entitys.push_back(house1);
-    house2->Setmode(worldMatrixLocation, mat4(1.0f), 0.5, 50.0, 20.0, 0.0);
+    house2->Setmode(worldMatrixLocation, mat4(1.0f), 1.0, 0.0, 20.0, 0.0);
     entitys.push_back(house2);
 
     
