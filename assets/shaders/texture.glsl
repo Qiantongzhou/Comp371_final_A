@@ -76,21 +76,44 @@ float spotlight_scalar() {
         return 0.0;
     }
 }
+float spotlight_scalar1() {
+    float theta = dot(normalize(fragment_position - light_position), light_direction-vec3(0.4,-0.3,.4));
+    
+    if(theta > light_cutoff_inner) {
+        return 1.0;
+    } else if(theta > light_cutoff_outer) {
+        return (1.0 - cos(PI * (theta - light_cutoff_outer) / (light_cutoff_inner - light_cutoff_outer))) / 2.0;
+    } else {
+        return 0.0;
+    }
+}
 
 void main()
 {
     vec3 ambient = vec3(0.0f);
     vec3 diffuse = vec3(0.0f);
     vec3 specular = vec3(0.0f);
+
+    vec3 ambient1 = vec3(0.0f);
+    vec3 diffuse1 = vec3(0.0f);
+    vec3 specular1 = vec3(0.0f);
+
     vec3 textureColor;
 
     float scalar = shadow_scalar() * spotlight_scalar();
+    float scalar1 = shadow_scalar() * spotlight_scalar1();
     ambient = ambient_color(light_color);
     diffuse = scalar * diffuse_color(light_color, light_position);
     specular = scalar * specular_color(light_color, light_position);
+
+    ambient1 = ambient_color(light_color+vec3(1.,0.5,0.5));
+    diffuse1 = scalar1 * diffuse_color(light_color+vec3(1.,0.0,0.0), (light_position+vec3(20.0,0.0,20.0)));
+    specular1 = scalar1 * specular_color(light_color+vec3(1.,0.0,0.0), (light_position+vec3(20.0,0.0,20.0)));
+
     textureColor = texture( textureSampler, vertexUV ).rgb;
    
-    vec3 color = (specular + diffuse + ambient) *object_color*(vec3(1.,1.0,1.0)+vertexColor)* textureColor;
+    vec3 color =(specular + diffuse + ambient) *object_color*(vec3(1.,1.0,1.0)+vertexColor)* textureColor;
+    color+= (specular1 + diffuse1)*object_color*(vec3(1.,1.0,1.0)+vertexColor)* textureColor;
     
     result = vec4(color, 1.0f);
 }
