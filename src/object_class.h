@@ -72,6 +72,55 @@ public:
         
         return mode;
     }
+    //????
+    void checkPosition(vec3 &cameraposition) {
+        //model collision size 
+        float factor = 7.0;
+        //collision calulation
+        //           
+        //    -x <--------------> x
+        //
+        if (cameraposition.x < location.x + factor) {
+            if (cameraposition.x > location.x - factor) {
+                if (cameraposition.z<location.z + factor && cameraposition.z>location.z - factor) {
+
+                    //+X,???????
+                    cameraposition.x = location.x + factor;
+                }
+            }
+        }else
+        if (cameraposition.x > location.x - factor) {
+            if (cameraposition.x < location.x + factor) {
+                if (cameraposition.z<location.z + factor && cameraposition.z>location.z - factor) {
+
+                    //-X,???????
+                    cameraposition.x = location.x - factor;
+                }
+            }
+        }
+        
+        if (cameraposition.z<location.z + factor) {
+            if (cameraposition.z > location.z - factor) {
+                if (cameraposition.x<location.x + factor && cameraposition.x > location.x - factor) {
+                    //+z,???????
+                    cameraposition.z = location.z + factor;
+                }
+            }
+           
+        }else
+        if (cameraposition.z > location.z - factor) {
+            if (cameraposition.z < location.z + factor){
+                if (cameraposition.x<location.x + factor && cameraposition.x > location.x - factor) {
+                    //-z,???????
+                    cameraposition.z = location.z - factor;
+                }
+            }
+
+        }
+            
+
+        
+    }
 
     void printmode() {
         if (type == Printtype::EBO) {

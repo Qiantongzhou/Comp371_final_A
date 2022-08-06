@@ -222,7 +222,7 @@ int main(int argc, char* argv[])
         lastFrameTime = glfwGetTime();
         mat4 viewMatrix = lookAt(cameraPosition, cameraPosition + cameraLookAt, cameraUp);
         //cout << cameraLookAt.x << endl;
-
+        cout << cameraPosition.x << " " << cameraPosition.y << " " << cameraPosition.z << endl;
         if (spolt) {
             // light parameters
             lightPosition = //  vec3(0.6f,50.0f,5.0f); // the location of the light in 3D space
@@ -321,7 +321,7 @@ int main(int argc, char* argv[])
             }
         }
         if (static_cast<int>(fmod(glfwGetTime(), 6) + 0.5) == 5) {
-            change2 = false;
+           // change2 = false;
         }
 
         int map[8][8] = {
@@ -347,6 +347,12 @@ int main(int argc, char* argv[])
             //vector print
            
             entitys[0]->Setmode(worldMatrixLocation, mat4(1.0f), 100.0f,0.0f,0.0f,0.0f,0.0f);
+            if (cameraPosition.y < 1.0) {
+                cameraPosition.y = 1.0;
+            }
+            if (cameraPosition.y > 200.0) {
+                cameraPosition.y = 200.0;
+            }
             entitys[0]->printmode();
 
             
@@ -358,18 +364,22 @@ int main(int argc, char* argv[])
                        
                         if (map2[i][j] == 1) {
                             entitys[2]->Setmode(worldMatrixLocation, mat4(1.0f), 3.0f, -10.0f*mlen + j * 20.0f, 1.0f, -10.0f*mwidth + i * 20.0f, 0.0f);
+                            entitys[2]->checkPosition(cameraPosition);
                             entitys[2]->printmode();
                         }
                         if (map2[i][j] == 2) {
                             entitys[3]->Setmode(worldMatrixLocation, mat4(1.0f), 1.0f, -10.0f * mlen + j * 20.0f, 1.0f, -10.0f * mwidth + i * 20.0f, 0.0f);
+                            entitys[3]->checkPosition(cameraPosition);
                             entitys[3]->printmode();
                         }
                         if (map2[i][j] == 3) {
                             entitys[4]->Setmode(worldMatrixLocation, mat4(1.0f), 0.02f, -10.0f * mlen + j * 20.0f, 1.0f, -10.0f * mwidth + i * 20.0f, 0.0f);
+                            entitys[4]->checkPosition(cameraPosition);
                             entitys[4]->printmode();
                         }
                         if (map2[i][j] == 4) {
                             entitys[5]->Setmode(worldMatrixLocation, mat4(1.0f), 0.2f, -10.0f * mlen + j * 20.0f, -5.0f, -10.0f * mwidth + i * 20.0f, 0.0f);
+                            entitys[5]->checkPosition(cameraPosition);
                             entitys[5]->printmode();
                         }
                     }
