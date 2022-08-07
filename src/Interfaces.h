@@ -18,7 +18,7 @@
 using namespace glm;
 using namespace std;
 
-const GLuint WIDTH = 1950, HEIGHT = 1080;
+const GLuint WIDTH = 2560, HEIGHT = 1440;
 GLFWwindow* window = nullptr;
 bool InitContext()
 {
@@ -149,3 +149,9 @@ auto rota(float rad, const vec3& point, const vec3& axis) {
     auto tran2 = translate(mat4(1.0f), -point);
     return tran1 * rotation * tran2;
 };
+float randomRotation() {
+    int temp = (rand() % (625 - 1)) + 1;
+    float result = temp / 100;
+    if (result < 0.0) result = -result;
+    return result;
+}
