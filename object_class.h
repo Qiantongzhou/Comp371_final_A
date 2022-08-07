@@ -19,6 +19,9 @@
 
 using namespace glm;
 using namespace std;
+int currentlight = 1;
+
+
 enum Printtype
 {
     EBO,
@@ -44,7 +47,7 @@ public:
     mat4 mode;
     GLuint worldMatrixLocation=0;
     Printtype type=EBO;
-
+    
     vec3 centre = vec3((0.0f + mode_X) * mode_scale, 0.0f * mode_scale, (0.0f + mode_Y) * mode_scale);
     vec3 axis_rotate = vec3(0.0f, 1.0f, 0.0f);
     vec3 location = vec3(0.0f, 0.0f, 0.0f);
@@ -61,8 +64,8 @@ public:
     mat4 Setmode(GLuint worldMatrixLocation, mat4 mode, float mode_scale, float mode_X, float mode_Y,float mode_Z, float mode_angle) {
 
         // cout << "printboard: " << glfwGetTime() << endl;
-        centre = vec3((0.0f + mode_X), 0.0f+mode_Y , (0.0f + mode_Z) );
-        location = vec3((0.0f + mode_X) , 0.0f+mode_Y , (0.0f + mode_Z) );
+        this->centre = vec3((0.0f + mode_X), 0.0f+mode_Y , (0.0f + mode_Z) );
+        this->location = vec3((0.0f + mode_X) , 0.0f+mode_Y , (0.0f + mode_Z) );
         
 
         mode = mode * rota(mode_angle, centre, axis_rotate) * translate(mat4(1.0f), location) *
@@ -71,6 +74,67 @@ public:
         this->mode = mode;
         
         return mode;
+    }
+    void changetexture(GLuint texture) {
+        this->texture = texture;
+    }
+    void addlight(GLuint texturedShaderProgram,vec3 color,int lightnumber) {
+        vec3 lightFocus = location;
+        vec3 lightPosition = location + vec3(0.0, 40.0, 0.0);
+        vec3 lightDirection = normalize(lightFocus - lightPosition);
+        
+        string str = "light_position[" +to_string(currentlight);
+        str += "]";
+        const char* lp = str.c_str();
+        string str1 = "light_direction[" + to_string(currentlight);
+        str1 += "]";
+        const char* ld = str1.c_str();
+        string str2 = "light_color[" + to_string(currentlight);
+        str2 += "]";
+        const char* lc = str2.c_str();
+        // Set light position on scene shader
+        
+            SetUniformVec3(texturedShaderProgram, lp, lightPosition);
+
+            // Set light direction on scene shader
+            SetUniformVec3(texturedShaderProgram, ld, lightDirection);
+
+            SetUniformVec3(texturedShaderProgram, lc, color);
+        
+            currentlight = currentlight % lightnumber;
+            currentlight++;
+            
+        
+        
+    }
+    void dellight(GLuint texturedShaderProgram, int lightnumber) {
+        vec3 lightFocus = vec3(0.,0.,0);
+        vec3 lightPosition = vec3(0.,0.,0.);
+        vec3 lightDirection = normalize(lightFocus - lightPosition);
+
+        string str = "light_position[" + to_string(currentlight);
+        str += "]";
+        const char* lp = str.c_str();
+        string str1 = "light_direction[" + to_string(currentlight);
+        str1 += "]";
+        const char* ld = str1.c_str();
+        string str2 = "light_color[" + to_string(currentlight);
+        str2 += "]";
+        const char* lc = str2.c_str();
+        // Set light position on scene shader
+
+        SetUniformVec3(texturedShaderProgram, lp, lightPosition);
+
+        // Set light direction on scene shader
+        SetUniformVec3(texturedShaderProgram, ld, lightDirection);
+
+        SetUniformVec3(texturedShaderProgram, lc, vec3(0.0,0.0,0.0));
+
+        currentlight = currentlight % lightnumber;
+        currentlight++;
+
+
+
     }
     //碰撞盒子
     void checkPosition(vec3 &cameraposition) {

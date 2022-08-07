@@ -18,7 +18,7 @@
 using namespace glm;
 using namespace std;
 
-const GLuint WIDTH = 1950, HEIGHT = 1080;
+const GLuint WIDTH = 2560, HEIGHT = 1440;
 GLFWwindow* window = nullptr;
 bool InitContext()
 {
