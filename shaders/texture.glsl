@@ -1,10 +1,10 @@
 #version 330 core
 
 const float PI = 3.1415926535897932384626433832795;
-
-uniform vec3 light_color;
-uniform vec3 light_position;
-uniform vec3 light_direction;
+const int size=40;
+uniform vec3 light_color[size];
+uniform vec3 light_position[size];
+uniform vec3 light_direction[size];
 
 uniform vec3 object_color;
 
@@ -65,8 +65,8 @@ float shadow_scalar() {
     return ((current_depth - bias) < closest_depth) ? 1.0 : 0.0;
 }
 
-float spotlight_scalar() {
-    float theta = dot(normalize(fragment_position - light_position), light_direction);
+float spotlight_scalar(vec3 light_positions,vec3 light_directions) {
+    float theta = dot(normalize(fragment_position - light_positions), light_directions);
     
     if(theta > light_cutoff_inner) {
         return 1.0;
@@ -76,17 +76,18 @@ float spotlight_scalar() {
         return 0.0;
     }
 }
-float spotlight_scalar1() {
-    float theta = dot(normalize(fragment_position - light_position), light_direction-vec3(0.4,-0.3,.4));
-    
-    if(theta > light_cutoff_inner) {
-        return 1.0;
-    } else if(theta > light_cutoff_outer) {
-        return (1.0 - cos(PI * (theta - light_cutoff_outer) / (light_cutoff_inner - light_cutoff_outer))) / 2.0;
-    } else {
-        return 0.0;
-    }
+vec3 diffuse_colornight(vec3 light_color_arg, vec3 light_position_arg) {
+    vec3 light_direction = normalize(light_position_arg - fragment_position);
+    return 0.7 * light_color_arg * max(dot(normalize(fragment_normal), light_direction), 0.0f);
 }
+
+vec3 specular_colornight(vec3 light_color_arg, vec3 light_position_arg) {
+    vec3 light_direction = normalize(light_position_arg - fragment_position);
+    vec3 view_direction = normalize(view_position - fragment_position);
+    vec3 reflect_light_direction = reflect(-light_direction, normalize(fragment_normal));
+    return 0.4 * light_color_arg * pow(max(dot(reflect_light_direction, view_direction), 0.0f),32);
+}
+
 
 void main()
 {
@@ -94,26 +95,26 @@ void main()
     vec3 diffuse = vec3(0.0f);
     vec3 specular = vec3(0.0f);
 
-    vec3 ambient1 = vec3(0.0f);
-    vec3 diffuse1 = vec3(0.0f);
-    vec3 specular1 = vec3(0.0f);
 
     vec3 textureColor;
+    ambient = ambient_color(light_color[0]);
+    float scalar = shadow_scalar() * spotlight_scalar(light_position[0],light_direction[0]);
+    diffuse = scalar * diffuse_color(light_color[0], light_position[0]);
+    specular = scalar * specular_color(light_color[0], light_position[0]);
 
-    float scalar = shadow_scalar() * spotlight_scalar();
-    float scalar1 = spotlight_scalar1();
-    ambient = ambient_color(light_color);
-    diffuse = scalar * diffuse_color(light_color, light_position);
-    specular = scalar * specular_color(light_color, light_position);
-
-    ambient1 = ambient_color(light_color+vec3(1.,0.5,0.5));
-    diffuse1 = scalar1 * diffuse_color(light_color+vec3(1.,0.0,0.0), (light_position+vec3(20.0,0.0,20.0)));
-    specular1 = scalar1 * specular_color(light_color+vec3(1.,0.0,0.0), (light_position+vec3(20.0,0.0,20.0)));
-
+    
     textureColor = texture( textureSampler, vertexUV ).rgb;
    
     vec3 color =(specular + diffuse + ambient) *object_color*(vec3(1.,1.0,1.0)+vertexColor)* textureColor;
-    color+= (specular1 + diffuse1)*object_color*(vec3(1.,1.0,1.0)+vertexColor)* textureColor;
+
+    for(int i=1;i<size;i++){
+    scalar = spotlight_scalar(light_position[i],light_direction[i]);
+    diffuse = scalar * diffuse_colornight(light_color[i]+vec3(1.0,1.0,1.0), light_position[i]);
+    specular = scalar * specular_colornight(light_color[i]+vec3(1.0,1.0,1.0), light_position[i]);
+    color+=(specular + diffuse)*object_color*(vec3(1.,1.0,1.0)+vertexColor)* textureColor;
+    }
+
+    
     
     result = vec4(color, 1.0f);
 }
